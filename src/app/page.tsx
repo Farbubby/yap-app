@@ -13,7 +13,7 @@ export default function Home() {
         <div className="lg:text-4xl md:text-3xl sm:text-2xl text-xl">
           Welcome to the yap app!
         </div>
-        <div className="border border-gray-700 p-6 rounded-lg flex flex-col gap-8 lg:w-1/3 sm:w-1/2 w-3/4">
+        <div className="border border-gray-700 p-6 rounded-lg flex flex-col gap-8 xl:w-2/5 lg:w-1/2 md:w-2/3 sm:w-3/4 w-4/5">
           <div className="sm:text-sm text-xs text-center">
             Register an account to start yapping
           </div>
