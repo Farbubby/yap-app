@@ -7,6 +7,25 @@ export default function Home() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const register = async function (e: { preventDefault: () => void }) {
+    e.preventDefault();
+
+    const response = await fetch("/api/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ alias, username, password }),
+    });
+
+    if (response.ok) {
+      const user = await response.json();
+      console.log(user);
+    } else {
+      console.error("Failed to register");
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col justify-center items-center h-screen gap-14 bg-gray-950">
@@ -17,7 +36,7 @@ export default function Home() {
           <div className="sm:text-sm text-xs text-center">
             Register an account to start yapping
           </div>
-          <form className="flex flex-col gap-3">
+          <form onSubmit={(e) => register(e)} className="flex flex-col gap-3">
             <label className="text-xs">Alias</label>
             <input
               id="alias"
