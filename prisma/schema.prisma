@@ -7,10 +7,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
+model Users {
+  id         Int          @id @default(autoincrement())
+  alias      String
+  username   String       @unique
+  password   String
+  createdAt  DateTime     @default(now())
+  posts      Posts[]
+  comments   Comments[]
+  friends    Friends[]
+  Messages   Messages[]
+  GroupChats GroupChats[]
+}
+
+model Friends {
+  id     Int     @id @default(autoincrement())
+  user   Users   @relation(fields: [userId], references: [id])
+  userId Int
+  mute   Boolean
+}
+
+model Posts {
+  id        Int        @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime   @default(now())
+  author    Users      @relation(fields: [authorId], references: [id])
+  authorId  Int
+  comments  Comments[]
+}
+
+model Comments {
   id        Int      @id @default(autoincrement())
-  alias     String
-  username  String   @unique
-  password  String
+  content   String
   createdAt DateTime @default(now())
+  author    Users    @relation(fields: [authorId], references: [id])
+  authorId  Int
+  post      Posts    @relation(fields: [postId], references: [id])
+  postId    Int
+}
+
+model Messages {
+  id           Int        @id @default(autoincrement())
+  content      String
+  createdAt    DateTime   @default(now())
+  author       Users      @relation(fields: [authorId], references: [id])
+  authorId     Int
+  GroupChats   GroupChats @relation(fields: [groupChatsId], references: [id])
+  groupChatsId Int
+}
+
+model GroupChats {
+  id       Int        @id @default(autoincrement())
+  name     String
+  members  Users[]
+  messages Messages[]
 }
