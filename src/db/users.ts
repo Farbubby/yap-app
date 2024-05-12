@@ -6,7 +6,7 @@ export const createUser = async (
   username: string,
   password: string
 ) => {
-  return prisma.user.create({
+  return prisma.users.create({
     data: {
       alias,
       username,
@@ -17,7 +17,7 @@ export const createUser = async (
 
 // GET
 export const getUser = async (username: string) => {
-  return prisma.user.findUnique({
+  return prisma.users.findUnique({
     where: {
       username,
     },
@@ -25,7 +25,7 @@ export const getUser = async (username: string) => {
 };
 
 export const getUsers = async () => {
-  return prisma.user.findMany();
+  return prisma.users.findMany();
 };
 
 // UPDATE
@@ -34,7 +34,7 @@ export const updateUser = async (
   alias: string,
   password: string
 ) => {
-  return prisma.user.update({
+  return prisma.users.update({
     where: {
       username,
     },
@@ -48,7 +48,7 @@ export const updateUser = async (
 
 // DELETE
 export const deleteUser = async (username: string) => {
-  return prisma.user.delete({
+  return prisma.users.delete({
     where: {
       username,
     },
