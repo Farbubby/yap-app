@@ -19,14 +19,10 @@ export async function POST(req: Request) {
     });
   }
 
-  if (await getUser(username)) {
-    return new Response("Username already exists", { status: 409 });
-  }
-
   const user = await createUser(alias, username, password);
 
   if (!user) {
-    return new Response("Failed to create user", { status: 500 });
+    return new Response("Username already exists", { status: 409 });
   }
 
   return new Response(JSON.stringify(user), { status: 201 });

@@ -6,13 +6,20 @@ export const createUser = async (
   username: string,
   password: string
 ) => {
-  return prisma.users.create({
-    data: {
-      alias,
-      username,
-      password,
-    },
-  });
+  let user = null;
+  try {
+    user = await prisma.users.create({
+      data: {
+        alias,
+        username,
+        password,
+      },
+    });
+    return user;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };
 
 // GET
