@@ -22,7 +22,7 @@ export async function POST(req: Request) {
   const user = await createUser(alias, username, password);
 
   if (!user) {
-    return new Response("Username already exists", { status: 409 });
+    return new Response("Username is taken", { status: 409 });
   }
 
   return new Response(JSON.stringify(user), { status: 201 });

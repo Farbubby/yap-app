@@ -3,12 +3,32 @@
 import { useState } from "react";
 
 export default function Home() {
+  // Form states
   const [alias, setAlias] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  // Error states
+  const [emptyFields, setEmptyFields] = useState(false);
+  const [shortPassword, setShortPassword] = useState(false);
+  const [usernameExists, setUsernameExists] = useState(false);
+
   const register = async function (e: { preventDefault: () => void }) {
     e.preventDefault();
+
+    if (!alias || !username || !password) {
+      setEmptyFields(true);
+      return;
+    } else {
+      setEmptyFields(false);
+    }
+
+    if (password.length < 8) {
+      setShortPassword(true);
+      return;
+    } else {
+      setShortPassword(false);
+    }
 
     const response = await fetch("/api/users", {
       method: "POST",
@@ -21,8 +41,12 @@ export default function Home() {
     if (response.ok) {
       const user = await response.json();
       console.log(user);
+      setUsernameExists(false);
+    } else if (response.status === 409) {
+      console.error("Username is taken");
+      setUsernameExists(true);
     } else {
-      console.error("Failed to register");
+      console.error("Failed to register user");
     }
   };
 
@@ -37,6 +61,11 @@ export default function Home() {
             Register an account to start yapping
           </div>
           <form onSubmit={(e) => register(e)} className="flex flex-col gap-3">
+            {emptyFields && (
+              <div className="text-red-500 text-xs">
+                Please fill in all fields
+              </div>
+            )}
             <label className="text-xs">Alias</label>
             <input
               id="alias"
@@ -48,13 +77,24 @@ export default function Home() {
               id="username"
               type="text"
               className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
-              onChange={(e) => setUsername(e.target.value)}></input>
+              onChange={(e) => {
+                setUsername(e.target.value);
+                setUsernameExists(false);
+              }}></input>
+            {usernameExists && (
+              <div className="text-red-500 text-xs">Username is taken</div>
+            )}
             <label className="text-xs">Password</label>
             <input
               id="password"
               type="password"
               className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
               onChange={(e) => setPassword(e.target.value)}></input>
+            {shortPassword && (
+              <div className="text-red-500 text-xs">
+                Password must be at least 8 characters long
+              </div>
+            )}
             <input
               type="submit"
               value="Register"
