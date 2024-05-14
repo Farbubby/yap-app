@@ -1,4 +1,5 @@
 import { prisma } from "./prisma";
+import { generateIdFromEntropySize } from "lucia";
 
 // CREATE
 export const createUser = async (
@@ -6,10 +7,11 @@ export const createUser = async (
   username: string,
   password: string
 ) => {
-  let user = null;
   try {
-    user = await prisma.users.create({
+    const userId = generateIdFromEntropySize(10);
+    let user = await prisma.users.create({
       data: {
+        id: userId,
         alias,
         username,
         password,
