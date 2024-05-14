@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Users {
-  id         Int          @id @default(autoincrement())
+  id         String       @id
   alias      String
   username   String       @unique
   password   String
@@ -18,47 +18,58 @@ model Users {
   friends    Friends[]
   Messages   Messages[]
   GroupChats GroupChats[]
+  Sessions   Sessions[]
+}
+
+model Sessions {
+  id        String   @id
+  token     String
+  createdAt DateTime @default(now())
+  user      Users    @relation(fields: [userId], references: [id])
+  userId    String
 }
 
 model Friends {
-  id     Int     @id @default(autoincrement())
+  id     String  @id
   user   Users   @relation(fields: [userId], references: [id])
-  userId Int
+  userId String
   mute   Boolean
 }
 
 model Posts {
-  id        Int        @id @default(autoincrement())
+  id        String     @id
   title     String
   content   String
   createdAt DateTime   @default(now())
   author    Users      @relation(fields: [authorId], references: [id])
-  authorId  Int
+  authorId  String
+  likes     Int
+  dislikes  Int
   comments  Comments[]
 }
 
 model Comments {
-  id        Int      @id @default(autoincrement())
+  id        String   @id
   content   String
   createdAt DateTime @default(now())
   author    Users    @relation(fields: [authorId], references: [id])
-  authorId  Int
+  authorId  String
   post      Posts    @relation(fields: [postId], references: [id])
-  postId    Int
+  postId    String
 }
 
 model Messages {
-  id           Int        @id @default(autoincrement())
+  id           String     @id
   content      String
   createdAt    DateTime   @default(now())
   author       Users      @relation(fields: [authorId], references: [id])
-  authorId     Int
+  authorId     String
   GroupChats   GroupChats @relation(fields: [groupChatsId], references: [id])
-  groupChatsId Int
+  groupChatsId String
 }
 
 model GroupChats {
-  id       Int        @id @default(autoincrement())
+  id       String     @id
   name     String
   members  Users[]
   messages Messages[]
