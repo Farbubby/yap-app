@@ -1,4 +1,4 @@
-import { createUser, getUser } from "@/db/users";
+import { createUser } from "@/db/users";
 
 export async function POST(req: Request) {
   const { alias, username, password } = (await req.json()) as {
