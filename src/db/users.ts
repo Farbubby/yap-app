@@ -25,12 +25,18 @@ export const createUser = async (
 };
 
 // GET
-export const getUser = async (username: string) => {
-  return prisma.users.findUnique({
-    where: {
-      username,
-    },
-  });
+export const getUserByUsername = async (username: string) => {
+  try {
+    const user = await prisma.users.findUnique({
+      where: {
+        username,
+      },
+    });
+    return user;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };
 
 export const getUsers = async () => {
