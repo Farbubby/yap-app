@@ -9,7 +9,7 @@ export const createUser = async (
 ) => {
   try {
     const userId = generateIdFromEntropySize(10);
-    let user = await prisma.users.create({
+    let user = await prisma.user.create({
       data: {
         id: userId,
         alias,
@@ -27,7 +27,7 @@ export const createUser = async (
 // GET
 export const getUserByUsername = async (username: string) => {
   try {
-    const user = await prisma.users.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         username,
       },
@@ -40,7 +40,7 @@ export const getUserByUsername = async (username: string) => {
 };
 
 export const getUsers = async () => {
-  return prisma.users.findMany();
+  return prisma.user.findMany();
 };
 
 // UPDATE
@@ -49,7 +49,7 @@ export const updateUser = async (
   alias: string,
   password: string
 ) => {
-  return prisma.users.update({
+  return prisma.user.update({
     where: {
       username,
     },
@@ -63,7 +63,7 @@ export const updateUser = async (
 
 // DELETE
 export const deleteUser = async (username: string) => {
-  return prisma.users.delete({
+  return prisma.user.delete({
     where: {
       username,
     },

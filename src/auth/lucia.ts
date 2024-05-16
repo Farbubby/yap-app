@@ -2,7 +2,7 @@ import { Lucia, TimeSpan } from "lucia";
 import { prisma } from "@/db/prisma";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 
-export const adapter = new PrismaAdapter(prisma.sessions, prisma.users);
+export const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
 export const lucia = new Lucia(adapter, {
   sessionExpiresIn: new TimeSpan(1, "d"),
