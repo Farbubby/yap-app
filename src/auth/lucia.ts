@@ -5,7 +5,7 @@ import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 export const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
 export const lucia = new Lucia(adapter, {
-  sessionExpiresIn: new TimeSpan(1, "d"),
+  sessionExpiresIn: new TimeSpan(30, "s"),
   sessionCookie: {
     expires: false,
     attributes: {
