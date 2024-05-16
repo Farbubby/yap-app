@@ -22,7 +22,7 @@ export default function LoginPage() {
     }
 
     const response = await fetch(
-      `/api/users?username=${username}&password=${password}`
+      `/api/login?username=${username}&password=${password}`
     );
 
     if (response.ok) {

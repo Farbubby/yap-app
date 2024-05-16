@@ -30,7 +30,7 @@ export default function Home() {
       setShortPassword(false);
     }
 
-    const response = await fetch("/api/users", {
+    const response = await fetch("/api/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
