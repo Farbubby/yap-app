@@ -7,69 +7,69 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
+model User {
   id         String       @id
   alias      String
   username   String       @unique
   password   String
   createdAt  DateTime     @default(now())
-  posts      Posts[]
-  comments   Comments[]
-  friends    Friends[]
-  Messages   Messages[]
-  GroupChats GroupChats[]
-  Sessions   Sessions[]
+  posts      Post[]
+  comments   Comment[]
+  friends    Friend[]
+  messages   Message[]
+  groupChats GroupChat[]
+  sessions   Session[]
 }
 
-model Sessions {
+model Session {
   id        String   @id
   expiresAt DateTime
-  user      Users    @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
   userId    String
 }
 
-model Friends {
+model Friend {
   id     String  @id
-  user   Users   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String
   mute   Boolean
 }
 
-model Posts {
+model Post {
   id        String     @id
   title     String
   content   String
   createdAt DateTime   @default(now())
-  author    Users      @relation(fields: [authorId], references: [id])
+  author    User      @relation(fields: [authorId], references: [id])
   authorId  String
   likes     Int
   dislikes  Int
-  comments  Comments[]
+  comments  Comment[]
 }
 
-model Comments {
+model Comment {
   id        String   @id
   content   String
   createdAt DateTime @default(now())
-  author    Users    @relation(fields: [authorId], references: [id])
+  author    User    @relation(fields: [authorId], references: [id])
   authorId  String
-  post      Posts    @relation(fields: [postId], references: [id])
+  post      Post    @relation(fields: [postId], references: [id])
   postId    String
 }
 
-model Messages {
+model Message {
   id           String     @id
   content      String
   createdAt    DateTime   @default(now())
-  author       Users      @relation(fields: [authorId], references: [id])
+  author       User      @relation(fields: [authorId], references: [id])
   authorId     String
-  GroupChats   GroupChats @relation(fields: [groupChatsId], references: [id])
+  groupChat   GroupChat @relation(fields: [groupChatsId], references: [id])
   groupChatsId String
 }
 
-model GroupChats {
+model GroupChat {
   id       String     @id
   name     String
-  members  Users[]
-  messages Messages[]
+  members  User[]
+  messages Message[]
 }
