@@ -8,17 +8,38 @@ export async function GET(req: NextRequest) {
   const password = req.nextUrl.searchParams.get("password");
 
   if (!username || !password) {
-    return new Response("Missing username or password", { status: 400 });
+    return new Response(
+      JSON.stringify({
+        user: null,
+        session: null,
+        message: "Missing username or password",
+      }),
+      { status: 400 }
+    );
   }
 
   const user = await getUserByUsername(username);
 
   if (!user) {
-    return new Response("User not found", { status: 404 });
+    return new Response(
+      JSON.stringify({
+        user: null,
+        session: null,
+        message: "Username does not exist",
+      }),
+      { status: 404 }
+    );
   }
 
   if (user.password !== password) {
-    return new Response("Password is not correct", { status: 401 });
+    return new Response(
+      JSON.stringify({
+        user: null,
+        session: null,
+        message: "Password is not correct",
+      }),
+      { status: 401 }
+    );
   }
 
   const session = await lucia.createSession(user.id, {});
@@ -31,5 +52,7 @@ export async function GET(req: NextRequest) {
     sessionCookie.attributes
   );
 
-  return new Response(JSON.stringify(user), { status: 200 });
+  return new Response(JSON.stringify({ user, session, message: "Success" }), {
+    status: 200,
+  });
 }
