@@ -39,8 +39,8 @@ export default function Home() {
     });
 
     if (response.ok) {
-      const user = await response.json();
-      console.log(user);
+      const { user, message } = await response.json();
+      console.log(user, message);
       setUsernameExists(false);
     } else if (response.status === 409) {
       console.error("Username is taken");

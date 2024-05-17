@@ -26,8 +26,8 @@ export default function LoginPage() {
     );
 
     if (response.ok) {
-      const user = await response.json();
-      console.log(user, "Logged in");
+      const { user, session, message } = await response.json();
+      console.log(user, session, message);
       setIncorrectCredentials(false);
     } else {
       console.error("Failed to authenticate user");
