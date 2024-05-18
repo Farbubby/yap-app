@@ -42,6 +42,10 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  // Make sure only one session is active at a time for the user
+  await lucia.invalidateUserSessions(user.id);
+  await lucia.deleteExpiredSessions();
+
   const session = await lucia.createSession(user.id, {});
 
   const sessionCookie = lucia.createSessionCookie(session.id);
