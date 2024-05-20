@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Form from "../../components/form";
 import Input from "../../components/input";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Login() {
   // Form states
@@ -13,7 +15,9 @@ export default function Login() {
   const [emptyFields, setEmptyFields] = useState(false);
   const [incorrectCredentials, setIncorrectCredentials] = useState(false);
 
-  const login = async function (e: { preventDefault: () => void }) {
+  const router = useRouter();
+
+  const login = async function (e: any) {
     e.preventDefault();
 
     if (!username || !password) {
@@ -30,7 +34,7 @@ export default function Login() {
     if (response.ok) {
       const { user, session, message } = await response.json();
       console.log(user, session, message);
-      setIncorrectCredentials(false);
+      router.push("/home");
     } else {
       console.error("Failed to authenticate user");
       setIncorrectCredentials(true);
@@ -75,7 +79,7 @@ export default function Login() {
             />
           </Form>
           <div className="sm:text-sm text-xs text-center">
-            Do not have an account? Register
+            Do not have an account? <Link href="/register">Register</Link>
           </div>
         </div>
       </div>

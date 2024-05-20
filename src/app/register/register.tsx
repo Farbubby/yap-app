@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Form from "../../components/form";
 import Input from "../../components/input";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Register() {
   // Form states
@@ -15,7 +17,9 @@ export default function Register() {
   const [shortPassword, setShortPassword] = useState(false);
   const [usernameExists, setUsernameExists] = useState(false);
 
-  const register = async function (e: { preventDefault: () => void }) {
+  const router = useRouter();
+
+  const register = async function (e: any) {
     e.preventDefault();
 
     if (!alias || !username || !password) {
@@ -43,7 +47,7 @@ export default function Register() {
     if (response.ok) {
       const { user, message } = await response.json();
       console.log(user, message);
-      setUsernameExists(false);
+      router.push("/login");
     } else if (response.status === 409) {
       console.error("Username is taken");
       setUsernameExists(true);
@@ -101,7 +105,7 @@ export default function Register() {
             />
           </Form>
           <div className="sm:text-sm text-xs text-center">
-            Already have an account? Login
+            Already have an account? <Link href="/login">Login</Link>
           </div>
         </div>
       </div>
