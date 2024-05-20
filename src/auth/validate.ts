@@ -1,7 +1,7 @@
 import { lucia } from "@/auth/lucia";
 import { cookies } from "next/headers";
 
-export const validateUser = async function () {
+export const validateRequest = async function () {
   const sessionId = cookies().get(lucia.sessionCookieName)?.value || "";
 
   if (!sessionId) {
