@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
 import Home from "./home";
-import { validateUser } from "@/auth/validate";
+import { validateRequest } from "@/auth/validate";
+import { logout } from "@/auth/logout";
 
 export default async function HomePage() {
-  const { user, session } = await validateUser();
+  const { user, session } = await validateRequest();
 
   if (!user || !session) {
     redirect("/login");
@@ -11,7 +12,10 @@ export default async function HomePage() {
 
   return (
     <>
-      <Home userAlias={user.alias} userName={user.username} />
+      <Home userId={user.id} userAlias={user.alias} userName={user.username} />
+      <form action={logout}>
+        <button>Logout</button>
+      </form>
     </>
   );
 }

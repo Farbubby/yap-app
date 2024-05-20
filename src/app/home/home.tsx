@@ -1,13 +1,14 @@
 interface HomeProps {
+  userId: string;
   userAlias: string;
   userName: string;
 }
 
-export default function Home({ userAlias, userName }: HomeProps) {
+export default function Home({ userId, userAlias, userName }: HomeProps) {
   return (
     <>
       <div>
-        You logged in {userAlias} {userName} yay!!!
+        You logged in {userId} {userAlias} {userName} yay!!!
       </div>
     </>
   );
