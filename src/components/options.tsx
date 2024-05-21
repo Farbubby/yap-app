@@ -1,10 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { logout } from "@/auth/logout";
+import { useRouter } from "next/navigation";
 
 export default function Options() {
   const [toggle, setToggle] = useState(false);
+
+  const router = useRouter();
+
+  const logout = async function (e: any) {
+    e.preventDefault();
+
+    const response = await fetch("/api/auth/logout", {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      console.log("Logged out");
+      router.push("/login");
+    } else {
+      console.error("Failed to log out");
+    }
+  };
 
   return (
     <>
@@ -24,9 +41,7 @@ export default function Options() {
         {toggle && (
           <div className="flex flex-col gap-4 fixed bg-gray-900 p-4 text-center rounded-xl">
             <button onClick={() => setToggle(false)}>X</button>
-            <form action={logout}>
-              <button>Logout</button>
-            </form>
+            <button onClick={logout}>Logout</button>
             <div>Settings</div>
           </div>
         )}

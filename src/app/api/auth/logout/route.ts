@@ -1,15 +1,14 @@
-"use server";
-
-import { validateRequest } from "./validate";
-import { lucia } from "./lucia";
+import { lucia } from "@/auth/lucia";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { validateRequest } from "@/auth/validate";
 
-export const logout = async function () {
+export async function DELETE() {
   const { session } = await validateRequest();
 
   if (!session) {
-    return { error: "No session found" };
+    return new Response(JSON.stringify({ message: "No session found" }), {
+      status: 404,
+    });
   }
 
   await lucia.invalidateSession(session.id);
@@ -20,5 +19,6 @@ export const logout = async function () {
     sessionCookie.value,
     sessionCookie.attributes
   );
-  redirect("/login");
-};
+
+  return new Response(JSON.stringify({ message: "Success" }), { status: 200 });
+}
