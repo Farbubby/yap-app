@@ -1,4 +1,4 @@
-import { createUser } from "@/db/users";
+import { createUser, getUserByUsername } from "@/db/users";
 
 export async function POST(req: Request) {
   const { alias, username, password } = (await req.json()) as {
@@ -31,12 +31,19 @@ export async function POST(req: Request) {
     );
   }
 
+  if (await getUserByUsername(username)) {
+    return new Response(
+      JSON.stringify({ user: null, message: "Username is taken" }),
+      { status: 409 }
+    );
+  }
+
   const user = await createUser(alias, username, password);
 
   if (!user) {
     return new Response(
-      JSON.stringify({ user: null, message: "Username is taken" }),
-      { status: 409 }
+      JSON.stringify({ user: null, message: "Failed to create user" }),
+      { status: 500 }
     );
   }
 
