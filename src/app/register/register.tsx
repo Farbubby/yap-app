@@ -12,10 +12,7 @@ export default function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // Error states
-  const [emptyFields, setEmptyFields] = useState(false);
-  const [shortPassword, setShortPassword] = useState(false);
-  const [usernameExists, setUsernameExists] = useState(false);
+  const [error, setError] = useState("");
 
   const router = useRouter();
 
@@ -23,17 +20,13 @@ export default function Register() {
     e.preventDefault();
 
     if (!alias || !username || !password) {
-      setEmptyFields(true);
+      setError("Please fill in all fields");
       return;
-    } else {
-      setEmptyFields(false);
     }
 
     if (password.length < 8) {
-      setShortPassword(true);
+      setError("Password must be at least 8 characters long");
       return;
-    } else {
-      setShortPassword(false);
     }
 
     const response = await fetch("/api/register", {
@@ -47,10 +40,11 @@ export default function Register() {
     if (response.ok) {
       const { user, message } = await response.json();
       console.log(user, message);
+      setError("");
       router.push("/login");
     } else if (response.status === 409) {
       console.error("Username is taken");
-      setUsernameExists(true);
+      setError("Username is taken");
     } else {
       console.error("Failed to register user");
     }
@@ -66,42 +60,27 @@ export default function Register() {
           <div className="sm:text-sm text-xs text-center">
             Register an account to start yapping
           </div>
-          <Form action={register} value={"Register"}>
+          <Form submit={register} value={"Register"} errorMessage={error}>
             <Input
               id="alias"
               label="Alias"
               type="text"
-              placeholder="Enter your alias"
-              value={alias}
+              placeholder="Enter an alias"
               setValue={setAlias}
-              error={false || emptyFields}
-              errorMessage={emptyFields ? "Please enter an alias" : ""}
             />
             <Input
               id="username"
               label="Username"
               type="text"
-              placeholder="Enter your username"
-              value={username}
+              placeholder="Enter a username"
               setValue={setUsername}
-              error={usernameExists || emptyFields}
-              errorMessage={
-                emptyFields ? "Please enter a username" : "Username is taken"
-              }
             />
             <Input
               id="password"
               label="Password"
               type="password"
-              placeholder="Enter your password"
-              value={password}
+              placeholder="Enter a password"
               setValue={setPassword}
-              error={shortPassword || emptyFields}
-              errorMessage={
-                emptyFields
-                  ? "Please enter a password"
-                  : "Password must be at least 8 characters long"
-              }
             />
           </Form>
           <div className="sm:text-sm text-xs text-center">

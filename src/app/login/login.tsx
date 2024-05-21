@@ -11,9 +11,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // Error states
-  const [emptyFields, setEmptyFields] = useState(false);
-  const [incorrectCredentials, setIncorrectCredentials] = useState(false);
+  const [error, setError] = useState("");
 
   const router = useRouter();
 
@@ -21,10 +19,8 @@ export default function Login() {
     e.preventDefault();
 
     if (!username || !password) {
-      setEmptyFields(true);
+      setError("Please fill in all fields");
       return;
-    } else {
-      setEmptyFields(false);
     }
 
     const response = await fetch(
@@ -34,10 +30,11 @@ export default function Login() {
     if (response.ok) {
       const { user, session, message } = await response.json();
       console.log(user, session, message);
+      setError("");
       router.push("/home");
     } else {
       console.error("Failed to authenticate user");
-      setIncorrectCredentials(true);
+      setError("Username or password is incorrect");
     }
   };
 
@@ -48,34 +45,20 @@ export default function Login() {
           <div className="sm:text-sm text-xs text-center">
             Login to your account
           </div>
-          <Form action={login} value="Login">
+          <Form submit={login} value={"Login"} errorMessage={error}>
             <Input
               id="username"
               label="Username"
               type="text"
               placeholder="Enter your username"
-              value={username}
               setValue={setUsername}
-              error={emptyFields || incorrectCredentials}
-              errorMessage={
-                emptyFields
-                  ? "Please enter your username"
-                  : "Incorrect username or password"
-              }
             />
             <Input
               id="password"
               label="Password"
               type="password"
               placeholder="Enter your password"
-              value={password}
               setValue={setPassword}
-              error={emptyFields || incorrectCredentials}
-              errorMessage={
-                emptyFields
-                  ? "Please enter your password"
-                  : "Incorrect username or password"
-              }
             />
           </Form>
           <div className="sm:text-sm text-xs text-center">
