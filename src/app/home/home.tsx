@@ -1,15 +1,21 @@
+import { logout } from "@/auth/logout";
+import { User } from "lucia";
+import Navbar from "@/components/navbar";
+
 interface HomeProps {
-  userId: string;
-  userAlias: string;
-  userName: string;
+  user: User;
 }
 
-export default function Home({ userId, userAlias, userName }: HomeProps) {
+export default function Home({ user }: HomeProps) {
   return (
     <>
+      <Navbar />
       <div>
-        You logged in {userId} {userAlias} {userName} yay!!!
+        You logged in {user.id} {user.alias} {user.username} yay!!!
       </div>
+      <form action={logout}>
+        <button>Logout</button>
+      </form>
     </>
   );
 }
