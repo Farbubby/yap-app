@@ -1,12 +1,21 @@
-interface UserFormProps {
-  action: (e: any) => void;
+interface FormProps {
+  submit: (e: any) => void;
   children: React.ReactNode;
   value: string;
+  errorMessage: string;
 }
 
-export default function Form({ action, children, value }: UserFormProps) {
+export default function Form({
+  submit,
+  children,
+  value,
+  errorMessage,
+}: FormProps) {
   return (
-    <form onSubmit={(e) => action(e)} className="flex flex-col gap-3">
+    <form onSubmit={(e) => submit(e)} className="flex flex-col gap-3">
+      {errorMessage && (
+        <div className="text-red-500 text-sm">{errorMessage}</div>
+      )}
       {children}
       <input
         type="submit"
