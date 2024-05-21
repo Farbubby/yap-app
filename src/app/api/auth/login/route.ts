@@ -1,11 +1,12 @@
 import { getUserByUsername } from "@/db/users";
-import { NextRequest } from "next/server";
 import { lucia } from "@/auth/lucia";
 import { cookies } from "next/headers";
 
-export async function GET(req: NextRequest) {
-  const username = req.nextUrl.searchParams.get("username");
-  const password = req.nextUrl.searchParams.get("password");
+export async function POST(req: Request) {
+  const { username, password } = (await req.json()) as {
+    username: string;
+    password: string;
+  };
 
   if (!username || !password) {
     return new Response(
