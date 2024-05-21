@@ -1,4 +1,3 @@
-import { logout } from "@/auth/logout";
 import { User } from "lucia";
 import Navbar from "@/components/navbar";
 
@@ -9,13 +8,12 @@ interface HomeProps {
 export default function Home({ user }: HomeProps) {
   return (
     <>
-      <Navbar />
-      <div>
-        You logged in {user.id} {user.alias} {user.username} yay!!!
+      <div className="bg-gray-950 h-screen">
+        <Navbar />
+        <div>
+          You logged in {user.id} {user.alias} {user.username} yay!!!
+        </div>
       </div>
-      <form action={logout}>
-        <button>Logout</button>
-      </form>
     </>
   );
 }
