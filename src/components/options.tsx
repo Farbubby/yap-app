@@ -2,12 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { UserContext } from "@/app/home/home";
-import { useContext } from "react";
 
 export default function Options() {
-  const user = useContext(UserContext);
-
   const [toggle, setToggle] = useState(false);
 
   const router = useRouter();
@@ -29,7 +25,7 @@ export default function Options() {
 
   return (
     <>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-end">
         <button onClick={() => setToggle(!toggle)}>
           <svg
             className="h-8 w-8 cursor-pointer fill-white"
@@ -43,8 +39,8 @@ export default function Options() {
           </svg>
         </button>
         {toggle && (
-          <div className="flex flex-col gap-4 fixed bg-gray-900 p-4 rounded-xl">
-            <div className="flex flex-row-reverse gap-10">
+          <div className="flex flex-col gap-4 fixed bg-gray-900 p-4 rounded-xl w-fit">
+            <div className="flex flex-row gap-10 justify-end">
               <button onClick={() => setToggle(false)}>
                 <svg
                   className="h-5 w-5 cursor-pointer fill-white"
@@ -58,8 +54,10 @@ export default function Options() {
                 </svg>
               </button>
             </div>
-            <button onClick={logout}>Logout</button>
-            <div>Settings</div>
+            <div className="flex flex-col items-center gap-4">
+              <button onClick={logout}>Logout</button>
+              <div>Settings</div>
+            </div>
           </div>
         )}
       </div>

@@ -16,9 +16,7 @@ export default function Home({ user }: HomeProps) {
       <UserContext.Provider value={user}>
         <div className="bg-gray-950 h-screen">
           <Navbar />
-          <div>
-            You logged in {user.id} {user.alias} {user.username} yay!!!
-          </div>
+          <div>You logged in yay!!!</div>
         </div>
       </UserContext.Provider>
     </>
