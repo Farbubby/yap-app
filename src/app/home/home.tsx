@@ -3,6 +3,7 @@
 import { User } from "lucia";
 import Navbar from "@/components/navbar";
 import { createContext } from "react";
+import Post from "@/components/post";
 
 interface HomeProps {
   user: User;
@@ -14,9 +15,34 @@ export default function Home({ user }: HomeProps) {
   return (
     <>
       <UserContext.Provider value={user}>
-        <div className="bg-gray-950 h-screen">
+        <div>
           <Navbar />
-          <div>You logged in yay!!!</div>
+          <div className="flex flex-col items-center gap-10">
+            <Post
+              title="Hi"
+              author="Joe"
+              content="I like chicken"
+              date="January 4"
+              numLikes={4}
+              numDislikes={2}
+            />
+            <Post
+              title="Hello"
+              author="Jane"
+              content="I like fish"
+              date="January 5"
+              numLikes={5}
+              numDislikes={1}
+            />
+            <Post
+              title="Hey"
+              author="John"
+              content="I like beef"
+              date="January 6"
+              numLikes={6}
+              numDislikes={0}
+            />
+          </div>
         </div>
       </UserContext.Provider>
     </>
