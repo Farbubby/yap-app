@@ -4,6 +4,7 @@ import { User } from "lucia";
 import Navbar from "@/components/navbar";
 import { createContext } from "react";
 import Post from "@/components/post";
+import Footer from "@/components/footer";
 
 interface HomeProps {
   user: User;
@@ -17,7 +18,7 @@ export default function Home({ user }: HomeProps) {
       <UserContext.Provider value={user}>
         <div>
           <Navbar />
-          <div className="flex flex-col items-center gap-10">
+          <div className="flex flex-col items-center gap-10 py-28">
             <Post
               title="Hi"
               author="Joe"
@@ -43,6 +44,7 @@ export default function Home({ user }: HomeProps) {
               numDislikes={0}
             />
           </div>
+          <Footer />
         </div>
       </UserContext.Provider>
     </>
