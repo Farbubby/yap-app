@@ -5,7 +5,7 @@ import Navbar from "@/components/navbar";
 import { createContext, useState, useEffect } from "react";
 import Post from "@/components/post";
 import Footer from "@/components/footer";
-import PostForm from "@/components/post-form-modal";
+import PostFormModal from "@/components/post-form-modal";
 
 interface HomeProps {
   user: User;
@@ -56,7 +56,7 @@ export default function Home({ user }: HomeProps) {
           </div>
           <Footer toggle={setToggleModal} />
         </div>
-        {toggleModal && <PostForm close={() => setToggleModal(false)} />}
+        {toggleModal && <PostFormModal close={() => setToggleModal(false)} />}
       </UserContext.Provider>
     </>
   );
