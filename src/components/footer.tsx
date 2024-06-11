@@ -1,8 +1,12 @@
-export default function Footer() {
+interface FooterProps {
+  toggle: (val: boolean) => void;
+}
+
+export default function Footer({ toggle }: FooterProps) {
   return (
     <>
       <div className="flex flex-row py-8 px-10 fixed w-fit right-0 bottom-0">
-        <button>
+        <button onClick={() => toggle(true)}>
           <svg
             className="fill-gray-500"
             xmlns="http://www.w3.org/2000/svg"

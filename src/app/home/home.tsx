@@ -2,9 +2,10 @@
 
 import { User } from "lucia";
 import Navbar from "@/components/navbar";
-import { createContext } from "react";
+import { createContext, useState, useEffect } from "react";
 import Post from "@/components/post";
 import Footer from "@/components/footer";
+import PostForm from "@/components/post-form-modal";
 
 interface HomeProps {
   user: User;
@@ -13,6 +14,15 @@ interface HomeProps {
 export const UserContext = createContext({} as User);
 
 export default function Home({ user }: HomeProps) {
+  const [toggleModal, setToggleModal] = useState(false);
+  useEffect(() => {
+    if (toggleModal) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  });
   return (
     <>
       <UserContext.Provider value={user}>
@@ -44,8 +54,9 @@ export default function Home({ user }: HomeProps) {
               numDislikes={0}
             />
           </div>
-          <Footer />
+          <Footer toggle={setToggleModal} />
         </div>
+        {toggleModal && <PostForm close={() => setToggleModal(false)} />}
       </UserContext.Provider>
     </>
   );
