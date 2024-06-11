@@ -1,15 +1,25 @@
+"use client";
+
+import { useState } from "react";
+
 interface PostFormProps {
   close: () => void;
 }
 
 export default function PostFormModal({ close }: PostFormProps) {
+  const [animateState, setAnimateState] = useState("animate-fadeInUp");
   return (
     <>
       <div className="fixed inset-0 flex flex-row w-full h-full backdrop-blur-md justify-center items-center z-50">
-        <div className="border border-gray-700 p-6 rounded-lg flex flex-col gap-8 xl:w-2/5 lg:w-1/2 md:w-2/3 sm:w-3/4 w-4/5 bg-gray-950">
+        <div
+          className={`border border-gray-700 p-6 rounded-lg flex flex-col gap-8 xl:w-2/5 lg:w-1/2 md:w-2/3 sm:w-3/4 w-4/5 bg-gray-950 ${animateState}`}>
           <div className="sm:text-sm text-xs text-center flex flex-col gap-2">
             <div className="w-full flex flex-row-reverse">
-              <button onClick={() => close()}>
+              <button
+                onClick={() => {
+                  setAnimateState("animate-fadeOutDown");
+                  setTimeout(() => close(), 500);
+                }}>
                 <svg
                   className="h-6 w-6 cursor-pointer fill-white"
                   clip-rule="evenodd"
