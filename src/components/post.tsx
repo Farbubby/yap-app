@@ -29,7 +29,7 @@ export default function Post({
         <div className="flex flex-col gap-1">
           <div className="text-2xl">{title}</div>
           <div className="text-sm italic">{author}</div>
-          <div className="text-sm">{date}</div>
+          <div className="text-sm">{date.slice(0, 10)}</div>
         </div>
         <div className="text-sm">{content}</div>
         <div className="flex gap-8">

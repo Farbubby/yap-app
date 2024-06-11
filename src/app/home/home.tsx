@@ -15,6 +15,30 @@ export const UserContext = createContext({} as User);
 
 export default function Home({ user }: HomeProps) {
   const [toggleModal, setToggleModal] = useState(false);
+  const [postList, setPostList] = useState([]);
+
+  const posts = postList.map(
+    (post: {
+      id: string;
+      title: string;
+      authorId: string;
+      content: string;
+      createdAt: string;
+      likes: number;
+      dislikes: number;
+    }) => (
+      <Post
+        key={post.id}
+        title={post.title}
+        author={post.authorId}
+        content={post.content}
+        date={post.createdAt}
+        numLikes={post.likes}
+        numDislikes={post.dislikes}
+      />
+    )
+  );
+
   useEffect(() => {
     if (toggleModal) {
       document.body.style.overflow = "hidden";
@@ -23,37 +47,23 @@ export default function Home({ user }: HomeProps) {
       document.body.style.overflow = "auto";
     };
   });
+
+  useEffect(() => {
+    const getPosts = async () => {
+      const res = await fetch("/api/posts");
+      const data = await res.json();
+      console.log(data);
+      setPostList(data.posts);
+    };
+    getPosts();
+  }, []);
+
   return (
     <>
       <UserContext.Provider value={user}>
         <div>
           <Navbar />
-          <div className="flex flex-col items-center gap-10 py-28">
-            <Post
-              title="Hi"
-              author="Joe"
-              content="I like chicken"
-              date="January 4"
-              numLikes={4}
-              numDislikes={2}
-            />
-            <Post
-              title="Hello"
-              author="Jane"
-              content="I like fish"
-              date="January 5"
-              numLikes={5}
-              numDislikes={1}
-            />
-            <Post
-              title="Hey"
-              author="John"
-              content="I like beef"
-              date="January 6"
-              numLikes={6}
-              numDislikes={0}
-            />
-          </div>
+          <div className="flex flex-col items-center gap-10 py-28">{posts}</div>
           <Footer toggle={setToggleModal} />
         </div>
         {toggleModal && <PostFormModal close={() => setToggleModal(false)} />}

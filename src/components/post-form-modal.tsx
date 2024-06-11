@@ -1,13 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "@/app/home/home";
 
-interface PostFormProps {
+interface PostFormModalProps {
   close: () => void;
 }
 
-export default function PostFormModal({ close }: PostFormProps) {
+export default function PostFormModal({ close }: PostFormModalProps) {
   const [animateState, setAnimateState] = useState("animate-fadeInUp");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [error, setError] = useState("");
+
+  const user = useContext(UserContext);
+
+  const handlePostForm = async (e: any) => {
+    if (!title || !content) {
+      setError("Please fill in all fields");
+      e.preventDefault();
+      return;
+    }
+
+    if (!user) {
+      setError("Please log in to create a post");
+      e.preventDefault();
+      return;
+    }
+
+    const response = await fetch("/api/posts", {
+      method: "POST",
+      body: JSON.stringify({ title, content, authorId: user.id }),
+    });
+
+    if (response.ok) {
+      const { post, message } = await response.json();
+      console.log(post, message);
+      setError("");
+    } else {
+      console.error("Failed to create post");
+      setError("Failed to create post");
+    }
+  };
   return (
     <>
       <div className="fixed inset-0 flex flex-row w-full h-full backdrop-blur-md justify-center items-center z-50">
@@ -34,12 +68,14 @@ export default function PostFormModal({ close }: PostFormProps) {
             </div>
             <div>Create a post</div>
           </div>
-          <form className="flex flex-col gap-3">
+          <form onSubmit={handlePostForm} className="flex flex-col gap-3">
+            {error && <div className="text-red-500 text-sm">{error}</div>}
             <label className="text-xs">Title</label>
             <input
               type="text"
               placeholder="Title"
               className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
+              onChange={(e) => setTitle(e.target.value)}
             />
             <label className="text-xs">Yap here</label>
             <textarea
@@ -47,6 +83,7 @@ export default function PostFormModal({ close }: PostFormProps) {
               cols={10}
               placeholder="Content"
               className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
+              onChange={(e) => setContent(e.target.value)}
             />
             <input
               type="submit"
