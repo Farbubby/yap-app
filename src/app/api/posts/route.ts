@@ -1,4 +1,4 @@
-import { createPost } from "@/db/posts";
+import { createPost, getPosts } from "@/db/posts";
 
 export async function POST(req: Request) {
   const { title, content, authorId } = (await req.json()) as {
@@ -30,5 +30,20 @@ export async function POST(req: Request) {
 
   return new Response(JSON.stringify({ post, message: "Success" }), {
     status: 201,
+  });
+}
+
+export async function GET() {
+  const posts = await getPosts();
+
+  if (!posts) {
+    return new Response(
+      JSON.stringify({ posts: null, message: "Failed to get posts" }),
+      { status: 500 }
+    );
+  }
+
+  return new Response(JSON.stringify({ posts, message: "Success" }), {
+    status: 200,
   });
 }

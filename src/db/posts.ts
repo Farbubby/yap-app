@@ -25,3 +25,18 @@ export const createPost = async (
     return null;
   }
 };
+
+// READ
+export const getPosts = async () => {
+  try {
+    let posts = await prisma.post.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return posts;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
