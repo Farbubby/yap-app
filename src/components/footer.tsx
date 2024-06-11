@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <>
-      <div className="flex flex-row py-8 px-10 items-center justify-end fixed w-full bottom-0">
+      <div className="flex flex-row py-8 px-10 fixed w-fit right-0 bottom-0">
         <button>
           <svg
             className="fill-gray-500"
