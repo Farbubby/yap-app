@@ -14,6 +14,7 @@ export default function LoginForm() {
 
   const login = async function (e: any) {
     e.preventDefault();
+    router.refresh();
 
     if (!username || !password) {
       setError("Please fill in all fields");

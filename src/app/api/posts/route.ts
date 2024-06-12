@@ -1,4 +1,4 @@
-import { createPost, getPosts } from "@/db/posts";
+import { createPost, getPosts, updatePost } from "@/db/posts";
 
 export async function POST(req: Request) {
   const { title, content, authorId } = (await req.json()) as {
@@ -44,6 +44,39 @@ export async function GET() {
   }
 
   return new Response(JSON.stringify({ posts, message: "Success" }), {
+    status: 200,
+  });
+}
+
+export async function PUT(req: Request) {
+  const { postId, title, content } = (await req.json()) as {
+    postId: string;
+    title?: string;
+    content?: string;
+  };
+
+  if (!postId) {
+    return new Response(
+      JSON.stringify({
+        post: null,
+        message: "Can't update a non-existent post",
+      }),
+      {
+        status: 400,
+      }
+    );
+  }
+
+  const post = await updatePost(postId, title, content);
+
+  if (!post) {
+    return new Response(
+      JSON.stringify({ post: null, message: "Failed to update post" }),
+      { status: 500 }
+    );
+  }
+
+  return new Response(JSON.stringify({ post, message: "Success" }), {
     status: 200,
   });
 }

@@ -5,7 +5,7 @@ import Navbar from "@/components/navbar";
 import { useState, useEffect } from "react";
 import Post from "@/components/post";
 import Footer from "@/components/footer";
-import PostFormModal from "@/components/post-form-modal";
+import { CreatePostModal, UpdatePostModal } from "@/components/post-form-modal";
 import { UserContext } from "@/context/context";
 
 interface HomeProps {
@@ -13,7 +13,10 @@ interface HomeProps {
 }
 
 export default function Home({ user }: HomeProps) {
-  const [toggleModal, setToggleModal] = useState(false);
+  const [toggleCreatePostModal, setToggleCreatePostModal] = useState(false);
+  const [toggleUpdatePostModal, setToggleUpdatePostModal] = useState(false);
+  const [toggleDeletePostModal, setToggleDeletePostModal] = useState(false);
+  const [postId, setPostId] = useState("");
   const [postList, setPostList] = useState([]);
 
   const posts = postList.map(
@@ -28,18 +31,25 @@ export default function Home({ user }: HomeProps) {
     }) => (
       <Post
         key={post.id}
+        id={post.id}
         title={post.title}
         author={post.authorId}
         content={post.content}
         date={post.createdAt}
         numLikes={post.likes}
         numDislikes={post.dislikes}
+        selectId={setPostId}
+        toggle={setToggleUpdatePostModal}
       />
     )
   );
 
   useEffect(() => {
-    if (toggleModal) {
+    if (
+      toggleCreatePostModal ||
+      toggleUpdatePostModal ||
+      toggleDeletePostModal
+    ) {
       document.body.style.overflow = "hidden";
     }
     return () => {
@@ -63,9 +73,17 @@ export default function Home({ user }: HomeProps) {
         <div>
           <Navbar />
           <div className="flex flex-col items-center gap-10 py-28">{posts}</div>
-          <Footer toggle={setToggleModal} />
+          <Footer toggle={setToggleCreatePostModal} />
         </div>
-        {toggleModal && <PostFormModal close={() => setToggleModal(false)} />}
+        {toggleCreatePostModal && (
+          <CreatePostModal close={() => setToggleCreatePostModal(false)} />
+        )}
+        {toggleUpdatePostModal && (
+          <UpdatePostModal
+            postId={postId}
+            close={() => setToggleUpdatePostModal(false)}
+          />
+        )}
       </UserContext.Provider>
     </>
   );

@@ -40,3 +40,50 @@ export const getPosts = async () => {
     return null;
   }
 };
+
+// UPDATE
+export const updatePost = async (
+  postId: string,
+  title?: string,
+  content?: string
+) => {
+  try {
+    if (!title && !content) {
+      return "No changes";
+    } else if (!title) {
+      let post = await prisma.post.update({
+        where: {
+          id: postId,
+        },
+        data: {
+          content,
+        },
+      });
+      return post;
+    } else if (!content) {
+      let post = await prisma.post.update({
+        where: {
+          id: postId,
+        },
+        data: {
+          title,
+        },
+      });
+      return post;
+    } else {
+      let post = await prisma.post.update({
+        where: {
+          id: postId,
+        },
+        data: {
+          title,
+          content,
+        },
+      });
+      return post;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
