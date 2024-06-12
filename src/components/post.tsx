@@ -10,7 +10,8 @@ interface PostProps {
   numLikes: number;
   numDislikes: number;
   selectId: (val: string) => void;
-  toggle: (val: boolean) => void;
+  toggleUpdate: (val: boolean) => void;
+  toggleDelete: (val: boolean) => void;
 }
 
 export default function Post({
@@ -22,7 +23,8 @@ export default function Post({
   numLikes,
   numDislikes,
   selectId,
-  toggle,
+  toggleUpdate,
+  toggleDelete,
 }: PostProps) {
   const [likes, setLikes] = useState(false);
   const [dislikes, setDislikes] = useState(false);
@@ -45,7 +47,7 @@ export default function Post({
                 <button>
                   <svg
                     onClick={() => {
-                      toggle(true);
+                      toggleUpdate(true);
                       selectId(id);
                     }}
                     className="h-6 w-6 cursor-pointer fill-white"
@@ -64,7 +66,7 @@ export default function Post({
                 <button>
                   <svg
                     onClick={() => {
-                      //toggle(true);
+                      toggleDelete(true);
                       selectId(id);
                     }}
                     className="h-6 w-6 cursor-pointer fill-white"

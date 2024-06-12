@@ -87,3 +87,18 @@ export const updatePost = async (
     return null;
   }
 };
+
+// DELETE
+export const deletePost = async (postId: string) => {
+  try {
+    let post = await prisma.post.delete({
+      where: {
+        id: postId,
+      },
+    });
+    return post;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

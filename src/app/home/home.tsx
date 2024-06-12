@@ -5,7 +5,11 @@ import Navbar from "@/components/navbar";
 import { useState, useEffect } from "react";
 import Post from "@/components/post";
 import Footer from "@/components/footer";
-import { CreatePostModal, UpdatePostModal } from "@/components/post-form-modal";
+import {
+  CreatePostModal,
+  UpdatePostModal,
+  DeletePostModal,
+} from "@/components/post-form-modal";
 import { UserContext } from "@/context/context";
 
 interface HomeProps {
@@ -39,7 +43,8 @@ export default function Home({ user }: HomeProps) {
         numLikes={post.likes}
         numDislikes={post.dislikes}
         selectId={setPostId}
-        toggle={setToggleUpdatePostModal}
+        toggleUpdate={setToggleUpdatePostModal}
+        toggleDelete={setToggleDeletePostModal}
       />
     )
   );
@@ -82,6 +87,12 @@ export default function Home({ user }: HomeProps) {
           <UpdatePostModal
             postId={postId}
             close={() => setToggleUpdatePostModal(false)}
+          />
+        )}
+        {toggleDeletePostModal && (
+          <DeletePostModal
+            postId={postId}
+            close={() => setToggleDeletePostModal(false)}
           />
         )}
       </UserContext.Provider>

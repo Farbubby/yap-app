@@ -1,4 +1,4 @@
-import { createPost, getPosts, updatePost } from "@/db/posts";
+import { createPost, getPosts, updatePost, deletePost } from "@/db/posts";
 
 export async function POST(req: Request) {
   const { title, content, authorId } = (await req.json()) as {
@@ -72,6 +72,35 @@ export async function PUT(req: Request) {
   if (!post) {
     return new Response(
       JSON.stringify({ post: null, message: "Failed to update post" }),
+      { status: 500 }
+    );
+  }
+
+  return new Response(JSON.stringify({ post, message: "Success" }), {
+    status: 200,
+  });
+}
+
+export async function DELETE(req: Request) {
+  const { postId } = (await req.json()) as { postId: string };
+
+  if (!postId) {
+    return new Response(
+      JSON.stringify({
+        post: null,
+        message: "Can't delete a non-existent post",
+      }),
+      {
+        status: 400,
+      }
+    );
+  }
+
+  const post = await deletePost(postId);
+
+  if (!post) {
+    return new Response(
+      JSON.stringify({ post: null, message: "Failed to delete post" }),
       { status: 500 }
     );
   }
