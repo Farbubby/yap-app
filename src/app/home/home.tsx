@@ -2,16 +2,15 @@
 
 import { User } from "lucia";
 import Navbar from "@/components/navbar";
-import { createContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Post from "@/components/post";
 import Footer from "@/components/footer";
 import PostFormModal from "@/components/post-form-modal";
+import { UserContext } from "@/context/context";
 
 interface HomeProps {
   user: User;
 }
-
-export const UserContext = createContext({} as User);
 
 export default function Home({ user }: HomeProps) {
   const [toggleModal, setToggleModal] = useState(false);

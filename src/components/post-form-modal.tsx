@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useContext } from "react";
-import { UserContext } from "@/app/home/home";
+import { UserContext } from "@/context/context";
 
 interface PostFormModalProps {
   close: () => void;
