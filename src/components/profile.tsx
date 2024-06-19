@@ -7,11 +7,11 @@ export default function Profile() {
   const user = useContext(UserContext);
   return (
     <>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center p-2">
         <div className="text-xs">Logged in as</div>
         <div className="flex flex-row gap-4 items-center px-4 py-2 rounded-lg">
           <svg
-            className="fill-white cursor-pointer"
+            className="fill-white"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
