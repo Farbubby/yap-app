@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import Profile from "./profile";
 
-export default function Navbar() {
+export default function Options() {
   const router = useRouter();
 
   const logout = async function (e: any) {
@@ -22,12 +22,12 @@ export default function Navbar() {
   };
   return (
     <>
-      <div className="absolute right-20">
+      <div className="relative h-10">
         <input
           type="checkbox"
           className="peer top-0 left-0 absolute w-full h-10 opacity-0 z-20 cursor-pointer"
         />
-        <div className="bg-gray-900 px-4 py-2 rounded-lg peer-checked:rounded-b-none duration-1000 border">
+        <div className="bg-gray-900 px-4 py-2 rounded-lg peer-checked:rounded-b-none duration-1000 border h-10">
           Options
         </div>
         <svg
