@@ -5,12 +5,10 @@ import Navbar from "@/components/navbar";
 import { useState, useEffect } from "react";
 import Post from "@/components/post";
 import Footer from "@/components/footer";
-import {
-  CreatePostModal,
-  UpdatePostModal,
-  DeletePostModal,
-} from "@/components/post-form-modal";
-import { UserContext } from "@/context/context";
+import CreatePostModal from "@/components/create-post-modal";
+import UpdatePostModal from "@/components/update-post-modal";
+import DeletePostModal from "@/components/delete-post-modal";
+import { UserContext } from "@/context/user-context";
 
 interface HomeProps {
   user: User;

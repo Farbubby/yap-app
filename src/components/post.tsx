@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { UserContext } from "@/context/context";
+import { UserContext } from "@/context/user-context";
 
 interface PostProps {
   id: string;

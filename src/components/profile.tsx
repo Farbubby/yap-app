@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext } from "react";
-import { UserContext } from "@/context/context";
+import { UserContext } from "@/context/user-context";
 
 export default function Profile() {
   const user = useContext(UserContext);
