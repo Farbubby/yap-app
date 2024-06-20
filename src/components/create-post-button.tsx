@@ -3,7 +3,7 @@
 import { useState } from "react";
 import CreatePostModal from "./create-post-modal";
 
-export default function CreatePost() {
+export default function CreatePostButton() {
   const [toggleCreatePostModal, setToggleCreatePostModal] = useState(false);
   return (
     <>
