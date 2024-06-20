@@ -8,7 +8,7 @@ export default function Navbar() {
     <>
       <div className="flex flex-row justify-end items-center py-4 px-10 fixed w-full backdrop-blur-sm gap-8">
         <LinkButton label="Home" href="/home" />
-        <LinkButton label="Messages" href="" />
+        <LinkButton label="Messages" href="/message" />
         <Options />
       </div>
     </>

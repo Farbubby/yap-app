@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "@/context/user-context";
 
 interface UpdatePostModalProps {
@@ -48,6 +48,14 @@ export default function UpdatePostModal({
       setError("Failed to update post");
     }
   };
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  });
+
   return (
     <>
       <div className="fixed inset-0 flex flex-row w-full h-full backdrop-blur-md justify-center items-center z-50">
@@ -72,7 +80,7 @@ export default function UpdatePostModal({
                 </svg>
               </button>
             </div>
-            <div>Update this form</div>
+            <div>Update this post</div>
           </div>
           <form onSubmit={handleUpdatePost} className="flex flex-col gap-3">
             {error && <div className="text-red-500 text-sm">{error}</div>}
