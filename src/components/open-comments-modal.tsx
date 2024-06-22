@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useContext } from "react";
-import { PostContext } from "@/context/user-context";
+import { UserContext, PostContext } from "@/context/user-context";
+import Comment from "./comment";
 
 interface OpenCommentsModalProps {
   close: () => void;
@@ -10,18 +11,30 @@ interface OpenCommentsModalProps {
 export default function OpenCommentsModal({ close }: OpenCommentsModalProps) {
   const [animateState, setAnimateState] = useState("animate-fadeInUp");
   const [comment, setComment] = useState("");
-  const { id, title, author, content, date, numLikes, numDislikes } =
-    useContext(PostContext);
+
+  const post = useContext(PostContext);
+  const user = useContext(UserContext);
 
   const handleCreateComment = async (e: any) => {
+    if (!user || !post) {
+      console.error("User or post not found");
+      e.preventDefault();
+      return;
+    }
+
     if (!comment) {
+      console.error("Please fill in all fields");
       e.preventDefault();
       return;
     }
 
     const response = await fetch("/api/comments", {
       method: "POST",
-      body: JSON.stringify({ content: comment, authorId: author, postId: id }),
+      body: JSON.stringify({
+        content: comment,
+        authorId: user.id,
+        postId: post.id,
+      }),
     });
 
     if (response.ok) {
