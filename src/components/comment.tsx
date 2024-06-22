@@ -32,16 +32,16 @@ export default function Comment({
 
   return (
     <>
-      <div className="p-4 flex flex-col gap-8 w-2/5">
+      <div className="p-4 flex flex-col gap-8 w-full">
         <div className="flex flex-col gap-1">
           <div className="flex flex-row justify-between">
+            <div className="text-sm italic">{author}</div>
             {hasPermission && (
               <div className="flex flex-row gap-4">
                 <UpdatePostButton postId={id} />
                 <DeletePostButton postId={id} />
               </div>
             )}
-            <div className="text-sm italic">{author}</div>
           </div>
           <div className="text-sm">{date.slice(0, 10)}</div>
         </div>

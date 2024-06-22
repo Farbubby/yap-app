@@ -33,6 +33,9 @@ export const getCommentsByPostId = async (postId: string) => {
       where: {
         postId,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     return comments;
   } catch (error) {
