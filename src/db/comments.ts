@@ -43,3 +43,39 @@ export const getCommentsByPostId = async (postId: string) => {
     return null;
   }
 };
+
+// UPDATE
+export const updateComment = async (commentId: string, content?: string) => {
+  try {
+    if (!content) {
+      return "No changes";
+    }
+    let comment = await prisma.comment.update({
+      where: {
+        id: commentId,
+      },
+      data: {
+        content,
+      },
+    });
+    return comment;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+// DELETE
+export const deleteComment = async (commentId: string) => {
+  try {
+    let comment = await prisma.comment.delete({
+      where: {
+        id: commentId,
+      },
+    });
+    return comment;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

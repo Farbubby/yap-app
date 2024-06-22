@@ -1,4 +1,9 @@
-import { createComment, getCommentsByPostId } from "@/db/comments";
+import {
+  createComment,
+  getCommentsByPostId,
+  updateComment,
+  deleteComment,
+} from "@/db/comments";
 import { NextRequest } from "next/server";
 
 export async function POST(req: Request) {
@@ -56,6 +61,63 @@ export async function GET(req: NextRequest) {
   }
 
   return new Response(JSON.stringify({ comments, message: "Success" }), {
+    status: 200,
+  });
+}
+
+export async function PUT(req: Request) {
+  const { commentId, content } = (await req.json()) as {
+    commentId: string;
+    content?: string;
+  };
+
+  if (!commentId || !content) {
+    return new Response(
+      JSON.stringify({
+        comment: null,
+        message: "Missing commentId or content",
+      }),
+      { status: 400 }
+    );
+  }
+
+  const comment = await updateComment(commentId, content);
+
+  if (!comment) {
+    return new Response(
+      JSON.stringify({ comment: null, message: "Failed to update comment" }),
+      { status: 500 }
+    );
+  }
+
+  return new Response(JSON.stringify({ comment, message: "Success" }), {
+    status: 200,
+  });
+}
+
+export async function DELETE(req: Request) {
+  const { commentId } = (await req.json()) as { commentId: string };
+
+  if (!commentId) {
+    return new Response(
+      JSON.stringify({
+        comment: null,
+        message: "Missing commentId",
+      }),
+      { status: 400 }
+    );
+  }
+
+  const comment = await deleteComment(commentId);
+
+  if (!comment) {
+    return new Response(
+      JSON.stringify({ comment: null, message: "Failed to delete comment" }),
+      { status: 500 }
+    );
+  }
+
+  return new Response(JSON.stringify({ comment, message: "Success" }), {
     status: 200,
   });
 }
