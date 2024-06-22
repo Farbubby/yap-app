@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { UserContext } from "@/context/user-context";
 import UpdateCommentButton from "./update-comment-button";
-import DeletePostButton from "./delete-post-button";
+import DeleteCommentButton from "./delete-comment-button";
 
 interface CommentProps {
   id: string;
@@ -39,7 +39,7 @@ export default function Comment({
             {hasPermission && (
               <div className="flex flex-row gap-4">
                 <UpdateCommentButton commentId={id} />
-                <DeletePostButton postId={id} />
+                <DeleteCommentButton commentId={id} />
               </div>
             )}
           </div>

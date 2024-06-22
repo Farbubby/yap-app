@@ -114,7 +114,9 @@ export default function OpenCommentsModal({ close }: OpenCommentsModalProps) {
           <div className="flex flex-col overflow-y-scroll h-96">
             {commentsList}
           </div>
-          <form onSubmit={handleCreateComment} className="flex flex-row gap-4">
+          <form
+            onSubmit={handleCreateComment}
+            className="flex flex-row gap-4 justify-center">
             <input
               type="text"
               placeholder="Add a comment"
