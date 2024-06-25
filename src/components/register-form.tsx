@@ -1,85 +1,64 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useFormState } from "react-dom";
 import Link from "next/link";
+import { registerAction } from "@/auth/register";
 
 export default function RegisterForm() {
-  // Form states
-  const [alias, setAlias] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
-  const router = useRouter();
-
-  const register = async function (e: any) {
-    e.preventDefault();
-
-    if (!alias || !username || !password) {
-      setError("Please fill in all fields");
-      return;
-    }
-
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters long");
-      return;
-    }
-
-    const response = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ alias, username, password }),
-    });
-
-    if (response.ok) {
-      const { user, message } = await response.json();
-      console.log(user, message);
-      setError("");
-      router.push("/login");
-    } else if (response.status === 409) {
-      console.error("Username is taken");
-      setError("Username is taken");
-    } else {
-      console.error("Failed to register user");
-    }
-  };
-
+  const [error, register] = useFormState(registerAction, null);
   return (
     <>
       <div className="border border-gray-700 p-6 rounded-lg flex flex-col gap-8 xl:w-2/5 lg:w-1/2 md:w-2/3 sm:w-3/4 w-4/5">
         <div className="sm:text-sm text-xs text-center">
           Register an account to start yapping
         </div>
-        <form onSubmit={(e) => register(e)} className="flex flex-col gap-3">
-          {/* Error message */}
-          {error && <div className="text-red-500 text-sm">{error}</div>}
-          {/* Alias */}
-          <label className="text-xs">Alias</label>
+        <form action={register} className="flex flex-col gap-3">
+          {error?.unexpectedError && (
+            <div className="text-red-500 text-sm">{error.unexpectedError}</div>
+          )}
+          <label htmlFor="alias" className="text-xs">
+            Alias
+          </label>
           <input
+            id="alias"
+            name="alias"
             type="text"
             className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
             placeholder="Alias"
-            onChange={(e) => setAlias(e.target.value)}
           />
-          {/* Username */}
-          <label className="text-xs">Username</label>
+          {error?.fieldError?.alias && (
+            <div className="text-red-500 text-sm">{error.fieldError.alias}</div>
+          )}
+          <label htmlFor="username" className="text-xs">
+            Username
+          </label>
           <input
+            id="username"
+            name="username"
             type="text"
             className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
             placeholder="Username"
-            onChange={(e) => setUsername(e.target.value)}
           />
-          {/* Password */}
-          <label className="text-xs">Password</label>
+          {error?.fieldError?.username && (
+            <div className="text-red-500 text-sm">
+              {error.fieldError.username}
+            </div>
+          )}
+          <label htmlFor="password" className="text-xs">
+            Password
+          </label>
           <input
+            id="password"
+            name="password"
             type="password"
             className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
             placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
           />
+          {error?.fieldError?.password && (
+            <div className="text-red-500 text-sm">
+              {error.fieldError.password}
+            </div>
+          )}
           <input
             type="submit"
             value="Register"
