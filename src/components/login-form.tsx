@@ -1,69 +1,47 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useFormState } from "react-dom";
 import Link from "next/link";
+import { loginAction } from "@/auth/login";
 
 export default function LoginForm() {
-  // Form states
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
-  const router = useRouter();
-
-  const login = async function (e: any) {
-    e.preventDefault();
-    router.refresh();
-
-    if (!username || !password) {
-      setError("Please fill in all fields");
-      return;
-    }
-
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (response.ok) {
-      const { user, session, message } = await response.json();
-      console.log(user, session, message);
-      setError("");
-      router.push("/home");
-    } else {
-      console.error("Failed to authenticate user");
-      setError("Username or password is incorrect");
-    }
-  };
+  const [error, login] = useFormState(loginAction, null);
   return (
     <>
       <div className="border border-gray-700 p-6 rounded-lg flex flex-col gap-8 xl:w-2/5 lg:w-1/2 md:w-2/3 sm:w-3/4 w-4/5">
         <div className="sm:text-sm text-xs text-center">
           Login to your account
         </div>
-        <form onSubmit={(e) => login(e)} className="flex flex-col gap-3">
-          {/* Error message */}
-          {error && <div className="text-red-500 text-sm">{error}</div>}
-          {/* Username */}
+        <form action={login} className="flex flex-col gap-3">
+          {error?.authError && (
+            <div className="text-red-500 text-sm">{error.authError}</div>
+          )}
           <label className="text-xs">Username</label>
           <input
+            id="username"
+            name="username"
             type="text"
             className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
             placeholder="Username"
-            onChange={(e) => setUsername(e.target.value)}
           />
-          {/* Password */}
+          {error?.fieldError?.username && (
+            <div className="text-red-500 text-sm">
+              {error.fieldError.username}
+            </div>
+          )}
           <label className="text-xs">Password</label>
           <input
+            id="password"
+            name="password"
             type="password"
             className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
             placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
           />
+          {error?.fieldError?.password && (
+            <div className="text-red-500 text-sm">
+              {error.fieldError.password}
+            </div>
+          )}
           <input
             type="submit"
             value="Register"
