@@ -1,3 +1,5 @@
+"use client";
+
 import { useContext, useState } from "react";
 import { UserContext, PostContext } from "@/context/user-context";
 import UpdatePostButton from "./update-post-button";

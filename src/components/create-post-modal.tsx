@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useContext, useEffect } from "react";
-import { UserContext } from "@/context/user-context";
+import { useFormState } from "react-dom";
+import { createPostAction } from "@/server/post/create-post";
 
 interface CreatePostModalProps {
   close: () => void;
@@ -10,39 +11,7 @@ interface CreatePostModalProps {
 // Modal form for creating a post
 export default function CreatePostModal({ close }: CreatePostModalProps) {
   const [animateState, setAnimateState] = useState("animate-fadeInUp");
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [error, setError] = useState("");
-
-  const user = useContext(UserContext);
-
-  const handleCreatePost = async (e: any) => {
-    if (!title || !content) {
-      setError("Please fill in all fields");
-      e.preventDefault();
-      return;
-    }
-
-    if (!user) {
-      setError("Please log in to create a post");
-      e.preventDefault();
-      return;
-    }
-
-    const response = await fetch("/api/posts", {
-      method: "POST",
-      body: JSON.stringify({ title, content, authorId: user.id }),
-    });
-
-    if (response.ok) {
-      const { post, message } = await response.json();
-      console.log(post, message);
-      setError("");
-    } else {
-      console.error("Failed to create post");
-      setError("Failed to create post");
-    }
-  };
+  const [error, createPost] = useFormState(createPostAction, null);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -77,23 +46,40 @@ export default function CreatePostModal({ close }: CreatePostModalProps) {
             </div>
             <div>Create a post</div>
           </div>
-          <form onSubmit={handleCreatePost} className="flex flex-col gap-3">
-            {error && <div className="text-red-500 text-sm">{error}</div>}
+          <form action={createPost} className="flex flex-col gap-3">
+            {error?.serverError && (
+              <div className="text-red-500 text-sm">{error.serverError}</div>
+            )}
+            {error?.success && (
+              <div className="text-green-500 text-sm">{error.success}</div>
+            )}
             <label className="text-xs">Title</label>
             <input
+              id="title"
+              name="title"
               type="text"
               placeholder="Title"
               className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
-              onChange={(e) => setTitle(e.target.value)}
             />
+            {error?.fieldError?.title && (
+              <div className="text-red-500 text-sm">
+                {error.fieldError.title}
+              </div>
+            )}
             <label className="text-xs">Yap here</label>
             <textarea
+              id="content"
+              name="content"
               rows={10}
               cols={10}
               placeholder="Content"
               className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
-              onChange={(e) => setContent(e.target.value)}
             />
+            {error?.fieldError?.content && (
+              <div className="text-red-500 text-sm">
+                {error.fieldError.content}
+              </div>
+            )}
             <input
               type="submit"
               value={"Submit"}

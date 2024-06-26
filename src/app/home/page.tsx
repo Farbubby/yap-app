@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Home from "./home";
 import { validateRequest } from "@/auth/validate";
+import PostList from "@/components/post-list";
 
 export default async function HomePage() {
   const { user, session } = await validateRequest();
@@ -11,7 +12,9 @@ export default async function HomePage() {
 
   return (
     <>
-      <Home user={user} />
+      <Home user={user}>
+        <PostList />
+      </Home>
     </>
   );
 }
