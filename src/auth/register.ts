@@ -51,7 +51,7 @@ export async function registerAction(_: unknown, formData: FormData) {
 
   if (!user) {
     return {
-      unexpectedError: "An unexpected error occurred.",
+      serverError: "Failed to create user",
     };
   }
 

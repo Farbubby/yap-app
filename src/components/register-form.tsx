@@ -13,8 +13,8 @@ export default function RegisterForm() {
           Register an account to start yapping
         </div>
         <form action={register} className="flex flex-col gap-3">
-          {error?.unexpectedError && (
-            <div className="text-red-500 text-sm">{error.unexpectedError}</div>
+          {error?.serverError && (
+            <div className="text-red-500 text-sm">{error.serverError}</div>
           )}
           <label htmlFor="alias" className="text-xs">
             Alias
