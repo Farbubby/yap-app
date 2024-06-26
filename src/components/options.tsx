@@ -1,25 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import Profile from "./profile";
+import { logoutAction } from "@/auth/logout";
 
 export default function Options() {
-  const router = useRouter();
-
-  const logout = async function (e: any) {
-    e.preventDefault();
-
-    const response = await fetch("/api/auth/logout", {
-      method: "DELETE",
-    });
-
-    if (response.ok) {
-      console.log("Logged out");
-      router.push("/login");
-    } else {
-      console.error("Failed to log out");
-    }
-  };
   return (
     <>
       <div className="relative h-10">
@@ -42,11 +26,11 @@ export default function Options() {
         </svg>
         <div className="bg-gray-900 rounded-b-lg max-h-0 overflow-hidden peer-checked:max-h-40 duration-500">
           <div className="flex flex-col border-b">
-            <button
-              onClick={logout}
-              className="hover:bg-gray-950 duration-200 px-4 py-2">
-              Logout
-            </button>
+            <form
+              action={logoutAction}
+              className="hover:bg-gray-950 duration-200 py-2 flex flex-row justify-center">
+              <button className="w-full">Logout</button>
+            </form>
             <button className="hover:bg-gray-950 duration-200 px-4 py-2">
               Settings
             </button>

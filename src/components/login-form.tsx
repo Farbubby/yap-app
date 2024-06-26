@@ -44,7 +44,7 @@ export default function LoginForm() {
           )}
           <input
             type="submit"
-            value="Register"
+            value="Login"
             className="rounded-lg bg-gray-900 text-white py-1 hover:bg-gray-800 cursor-pointer"
           />
         </form>
