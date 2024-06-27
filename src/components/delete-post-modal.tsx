@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useContext, useEffect } from "react";
-import { UserContext } from "@/context/user-context";
+import { deletePostAction } from "@/server/post/delete-post";
+import { useFormState } from "react-dom";
 
 interface DeletePostModalProps {
   postId: string;
@@ -14,34 +15,10 @@ export default function DeletePostModal({
   close,
 }: DeletePostModalProps) {
   const [animateState, setAnimateState] = useState("animate-fadeInUp");
-  const [error, setError] = useState("");
-
-  const user = useContext(UserContext);
-
-  const handleDeletePost = async (e: any) => {
-    e.preventDefault();
-
-    if (!user) {
-      setError("Please log in to delete your posts");
-      e.preventDefault();
-      return;
-    }
-
-    const response = await fetch("/api/posts", {
-      method: "DELETE",
-      body: JSON.stringify({ postId }),
-    });
-
-    if (response.ok) {
-      const { post, message } = await response.json();
-      console.log(post, message);
-      setError("");
-      window.location.reload();
-    } else {
-      console.error("Failed to delete post");
-      setError("Failed to delete post");
-    }
-  };
+  const [error, deletePost] = useFormState(
+    deletePostAction.bind(null, postId),
+    null
+  );
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -59,11 +36,16 @@ export default function DeletePostModal({
             Are you sure you want to delete the post?
           </div>
           <div className="sm:text-sm text-xs text-center flex flex-row gap-20 justify-center">
-            <button
-              className="rounded-lg p-2 bg-green-700 w-20 hover:bg-green-500"
-              onClick={handleDeletePost}>
-              Yes
-            </button>
+            <form action={deletePost}>
+              <button
+                className="rounded-lg p-2 bg-green-700 w-20 hover:bg-green-500"
+                onClick={() => {
+                  setAnimateState("animate-fadeOutDown");
+                  setTimeout(() => close(), 500);
+                }}>
+                Yes
+              </button>
+            </form>
             <button
               className="rounded-lg p-2 bg-red-700 w-20 hover:bg-red-500"
               onClick={() => {
