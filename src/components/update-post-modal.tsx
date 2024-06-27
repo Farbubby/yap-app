@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useContext, useEffect } from "react";
-import { UserContext } from "@/context/user-context";
+import { useFormState } from "react-dom";
+import { updatePostAction } from "@/server/post/update-post";
 
 interface UpdatePostModalProps {
   postId: string;
@@ -14,40 +15,10 @@ export default function UpdatePostModal({
   close,
 }: UpdatePostModalProps) {
   const [animateState, setAnimateState] = useState("animate-fadeInUp");
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [error, setError] = useState("");
-
-  const user = useContext(UserContext);
-
-  const handleUpdatePost = async (e: any) => {
-    if (!title && !content) {
-      e.preventDefault();
-      setAnimateState("animate-fadeOutDown");
-      setTimeout(() => close(), 500);
-      return;
-    }
-
-    if (!user) {
-      setError("Please log in to update your posts");
-      e.preventDefault();
-      return;
-    }
-
-    const response = await fetch("/api/posts", {
-      method: "PUT",
-      body: JSON.stringify({ title, content, postId }),
-    });
-
-    if (response.ok) {
-      const { post, message } = await response.json();
-      console.log(post, message);
-      setError("");
-    } else {
-      console.error("Failed to update post");
-      setError("Failed to update post");
-    }
-  };
+  const [error, updatePost] = useFormState(
+    updatePostAction.bind(null, postId),
+    null
+  );
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -82,23 +53,40 @@ export default function UpdatePostModal({
             </div>
             <div>Update this post</div>
           </div>
-          <form onSubmit={handleUpdatePost} className="flex flex-col gap-3">
-            {error && <div className="text-red-500 text-sm">{error}</div>}
+          <form action={updatePost} className="flex flex-col gap-3">
+            {error?.serverError && (
+              <div className="text-red-500 text-sm">{error.serverError}</div>
+            )}
+            {error?.success && (
+              <div className="text-green-500 text-sm">{error.success}</div>
+            )}
             <label className="text-xs">Title</label>
             <input
+              id="title"
+              name="title"
               type="text"
               placeholder="Title"
               className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
-              onChange={(e) => setTitle(e.target.value)}
             />
+            {error?.fieldError?.title && (
+              <div className="text-red-500 text-sm">
+                {error.fieldError.title}
+              </div>
+            )}
             <label className="text-xs">Yap here</label>
             <textarea
+              id="content"
+              name="content"
               rows={10}
               cols={10}
               placeholder="Content"
               className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
-              onChange={(e) => setContent(e.target.value)}
             />
+            {error?.fieldError?.content && (
+              <div className="text-red-500 text-sm">
+                {error.fieldError.content}
+              </div>
+            )}
             <input
               type="submit"
               value={"Submit"}
