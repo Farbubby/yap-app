@@ -10,7 +10,7 @@ const CreatePostSchema = z.object({
   content: z.string().min(1, "Content must be at least 1 character long"),
 });
 
-export async function createPostAction(_: unknown, formData: FormData) {
+export async function handleCreatePost(formData: FormData) {
   const { user, session } = await validateRequest();
 
   if (!user || !session) {
@@ -42,8 +42,6 @@ export async function createPostAction(_: unknown, formData: FormData) {
       serverError: "Failed to create post",
     };
   }
-
-  revalidatePath("/");
 
   return { success: "Submitted post successfully" };
 }

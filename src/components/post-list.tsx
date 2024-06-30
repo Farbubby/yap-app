@@ -1,14 +1,35 @@
+"use client";
+
 import Post from "@/components/post";
 import { getPosts } from "@/db/posts";
+import { useQuery } from "@tanstack/react-query";
 
-export default async function PostList() {
-  const posts = await getPosts();
+export default function PostList() {
+  const query = useQuery({ queryKey: ["posts"], queryFn: () => getPosts() });
 
-  if (!posts) {
-    return <div>Failed to fetch posts</div>;
+  if (query.isLoading) {
+    return (
+      <div className="flex flex-col items-center gap-10 py-28">Loading...</div>
+    );
   }
 
-  const postList = posts.map((post) => (
+  if (query.isError) {
+    return (
+      <div className="flex flex-col items-center gap-10 py-28">
+        Error loading posts
+      </div>
+    );
+  }
+
+  if (!query.data) {
+    return (
+      <div className="flex flex-col items-center gap-10 py-28">
+        Be the first to post!
+      </div>
+    );
+  }
+
+  const postList = query.data.map((post) => (
     <Post
       key={post.id}
       id={post.id}

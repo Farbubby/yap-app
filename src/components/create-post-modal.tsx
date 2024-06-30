@@ -2,7 +2,9 @@
 
 import { useState, useContext, useEffect } from "react";
 import { useFormState } from "react-dom";
-import { createPostAction } from "@/server/post/create-post";
+import { handleCreatePost } from "@/server/post/create-post";
+import { useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CreatePostModalProps {
   close: () => void;
@@ -11,7 +13,16 @@ interface CreatePostModalProps {
 // Modal form for creating a post
 export default function CreatePostModal({ close }: CreatePostModalProps) {
   const [animateState, setAnimateState] = useState("animate-fadeInUp");
-  const [error, createPost] = useFormState(createPostAction, null);
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (formData: FormData) => handleCreatePost(formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      setAnimateState("animate-fadeOutDown");
+      setTimeout(() => close(), 500);
+    },
+  });
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -46,13 +57,12 @@ export default function CreatePostModal({ close }: CreatePostModalProps) {
             </div>
             <div>Create a post</div>
           </div>
-          <form action={createPost} className="flex flex-col gap-3">
-            {error?.serverError && (
-              <div className="text-red-500 text-sm">{error.serverError}</div>
-            )}
-            {error?.success && (
-              <div className="text-green-500 text-sm">{error.success}</div>
-            )}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              mutation.mutate(new FormData(e.target as HTMLFormElement));
+            }}
+            className="flex flex-col gap-3">
             <label className="text-xs">Title</label>
             <input
               id="title"
@@ -61,11 +71,6 @@ export default function CreatePostModal({ close }: CreatePostModalProps) {
               placeholder="Title"
               className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
             />
-            {error?.fieldError?.title && (
-              <div className="text-red-500 text-sm">
-                {error.fieldError.title}
-              </div>
-            )}
             <label className="text-xs">Yap here</label>
             <textarea
               id="content"
@@ -75,11 +80,6 @@ export default function CreatePostModal({ close }: CreatePostModalProps) {
               placeholder="Content"
               className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
             />
-            {error?.fieldError?.content && (
-              <div className="text-red-500 text-sm">
-                {error.fieldError.content}
-              </div>
-            )}
             <input
               type="submit"
               value={"Submit"}
