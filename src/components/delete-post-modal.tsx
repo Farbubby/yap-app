@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useContext, useEffect } from "react";
-import { deletePostAction } from "@/server/post/delete-post";
-import { useFormState } from "react-dom";
+import { handleDeletePost } from "@/server/post/delete-post";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface DeletePostModalProps {
   postId: string;
@@ -15,10 +15,14 @@ export default function DeletePostModal({
   close,
 }: DeletePostModalProps) {
   const [animateState, setAnimateState] = useState("animate-fadeInUp");
-  const [error, deletePost] = useFormState(
-    deletePostAction.bind(null, postId),
-    null
-  );
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: () => handleDeletePost(postId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -36,13 +40,14 @@ export default function DeletePostModal({
             Are you sure you want to delete the post?
           </div>
           <div className="sm:text-sm text-xs text-center flex flex-row gap-20 justify-center">
-            <form action={deletePost}>
-              <button
-                className="rounded-lg p-2 bg-green-700 w-20 hover:bg-green-500"
-                onClick={() => {
-                  setAnimateState("animate-fadeOutDown");
-                  setTimeout(() => close(), 500);
-                }}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setAnimateState("animate-fadeOutDown");
+                setTimeout(() => close(), 500);
+                mutation.mutate();
+              }}>
+              <button className="rounded-lg p-2 bg-green-700 w-20 hover:bg-green-500">
                 Yes
               </button>
             </form>

@@ -4,7 +4,7 @@ import { deletePost } from "@/db/posts";
 import { validateRequest } from "@/auth/validate";
 import { revalidatePath } from "next/cache";
 
-export async function deletePostAction(postId: string, _: unknown) {
+export async function handleDeletePost(postId: string) {
   const { user, session } = await validateRequest();
 
   if (!user || !session) {
@@ -20,8 +20,6 @@ export async function deletePostAction(postId: string, _: unknown) {
       serverError: "Failed to delete post",
     };
   }
-
-  revalidatePath("/");
 
   return { success: "Deleted post successfully" };
 }
