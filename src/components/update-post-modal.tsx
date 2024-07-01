@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useContext, useEffect } from "react";
-import { useFormState } from "react-dom";
-import { updatePostAction } from "@/server/post/update-post";
+import UpdatePostForm from "./update-post-form";
 
 interface UpdatePostModalProps {
   postId: string;
@@ -15,10 +14,6 @@ export default function UpdatePostModal({
   close,
 }: UpdatePostModalProps) {
   const [animateState, setAnimateState] = useState("animate-fadeInUp");
-  const [error, updatePost] = useFormState(
-    updatePostAction.bind(null, postId),
-    null
-  );
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -32,8 +27,8 @@ export default function UpdatePostModal({
       <div className="fixed inset-0 flex flex-row w-full h-full backdrop-blur-md justify-center items-center z-50">
         <div
           className={`border border-gray-700 p-6 rounded-lg flex flex-col gap-8 xl:w-2/5 lg:w-1/2 md:w-2/3 sm:w-3/4 w-4/5 bg-gray-950 ${animateState}`}>
-          <div className="sm:text-sm text-xs text-center flex flex-col gap-2">
-            <div className="w-full flex flex-row-reverse">
+          <div className="text-sm flex flex-col gap-2">
+            <div className="w-full flex flex-row justify-end">
               <button
                 onClick={() => {
                   setAnimateState("animate-fadeOutDown");
@@ -51,48 +46,8 @@ export default function UpdatePostModal({
                 </svg>
               </button>
             </div>
-            <div>Update this post</div>
+            <UpdatePostForm postId={postId} />
           </div>
-          <form action={updatePost} className="flex flex-col gap-3">
-            {error?.serverError && (
-              <div className="text-red-500 text-sm">{error.serverError}</div>
-            )}
-            {error?.success && (
-              <div className="text-green-500 text-sm">{error.success}</div>
-            )}
-            <label className="text-xs">Title</label>
-            <input
-              id="title"
-              name="title"
-              type="text"
-              placeholder="Title"
-              className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
-            />
-            {error?.fieldError?.title && (
-              <div className="text-red-500 text-sm">
-                {error.fieldError.title}
-              </div>
-            )}
-            <label className="text-xs">Yap here</label>
-            <textarea
-              id="content"
-              name="content"
-              rows={10}
-              cols={10}
-              placeholder="Content"
-              className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
-            />
-            {error?.fieldError?.content && (
-              <div className="text-red-500 text-sm">
-                {error.fieldError.content}
-              </div>
-            )}
-            <input
-              type="submit"
-              value={"Submit"}
-              className="rounded-lg bg-gray-900 text-white py-1 hover:bg-gray-800 cursor-pointer"
-            />
-          </form>
         </div>
       </div>
     </>

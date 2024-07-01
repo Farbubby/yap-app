@@ -10,11 +10,7 @@ const UpdatePostSchema = z.object({
   content: z.string(),
 });
 
-export async function updatePostAction(
-  postId: string,
-  _: unknown,
-  formData: FormData
-) {
+export async function handleUpdatePost(postId: string, formData: FormData) {
   const { user, session } = await validateRequest();
 
   if (!user || !session) {
@@ -46,8 +42,6 @@ export async function updatePostAction(
       serverError: "Failed to update post",
     };
   }
-
-  revalidatePath("/");
 
   return { success: "Updated post successfully" };
 }
