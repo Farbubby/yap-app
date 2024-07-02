@@ -1,3 +1,5 @@
+"use server";
+
 import { prisma } from "./prisma";
 import { generateIdFromEntropySize } from "lucia";
 
@@ -37,6 +39,7 @@ export const getCommentsByPostId = async (postId: string) => {
         createdAt: "desc",
       },
     });
+
     return comments;
   } catch (error) {
     console.error(error);
