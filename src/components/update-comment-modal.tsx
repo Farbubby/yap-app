@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useContext, useEffect } from "react";
-import { UserContext } from "@/context/user-context";
+import { PostContext } from "@/context/user-context";
+import UpdateCommentForm from "./update-comment-form";
 
 interface UpdateCommentModalProps {
   commentId: string;
@@ -17,39 +18,7 @@ export default function UpdateCommentModal({
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
 
-  const user = useContext(UserContext);
-
-  const handleUpdateComment = async (e: any) => {
-    if (!user) {
-      setError("Please log in to update your posts");
-      e.preventDefault();
-      return;
-    }
-
-    if (!content) {
-      e.preventDefault();
-      setAnimateState("animate-fadeOutDown");
-      setTimeout(() => close(), 500);
-      return;
-    }
-
-    const response = await fetch("/api/comments", {
-      method: "PUT",
-      body: JSON.stringify({
-        commentId,
-        content,
-      }),
-    });
-
-    if (response.ok) {
-      const { comment, message } = await response.json();
-      console.log(comment, message);
-      setError("");
-    } else {
-      console.error("Failed to update comment");
-      setError("Failed to update comment");
-    }
-  };
+  const post = useContext(PostContext);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -60,8 +29,8 @@ export default function UpdateCommentModal({
       <div className="fixed inset-0 flex flex-row w-full h-full backdrop-blur-md justify-center items-center z-50">
         <div
           className={`border border-gray-700 p-6 rounded-lg flex flex-col gap-8 xl:w-2/5 lg:w-1/2 md:w-2/3 sm:w-3/4 w-4/5 bg-gray-950 ${animateState}`}>
-          <div className="sm:text-sm text-xs text-center flex flex-col gap-2">
-            <div className="w-full flex flex-row-reverse">
+          <div className="text-sm flex flex-col gap-2">
+            <div className="w-full flex flex-row justify-end">
               <button
                 onClick={() => {
                   setAnimateState("animate-fadeOutDown");
@@ -79,23 +48,8 @@ export default function UpdateCommentModal({
                 </svg>
               </button>
             </div>
-            <div>Update this comment</div>
+            <UpdateCommentForm commentId={commentId} postId={post.id} />
           </div>
-          <form onSubmit={handleUpdateComment} className="flex flex-col gap-3">
-            <label className="text-xs">Comment here</label>
-            <textarea
-              rows={10}
-              cols={10}
-              placeholder="Content"
-              className="rounded-lg bg-gray-950 border-gray-700 border py-1 px-2 hover:bg-gray-900"
-              onChange={(e) => setContent(e.target.value)}
-            />
-            <input
-              type="submit"
-              value={"Submit"}
-              className="rounded-lg bg-gray-900 text-white py-1 hover:bg-gray-800 cursor-pointer"
-            />
-          </form>
         </div>
       </div>
     </>
