@@ -3,22 +3,21 @@
 import { useState, useContext, useEffect } from "react";
 import { handleDeletePost } from "@/server/post/delete-post";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { PostContext } from "@/context/user-context";
 
 interface DeletePostModalProps {
-  postId: string;
   close: () => void;
 }
 
 // Modal form for deleting a post
-export default function DeletePostModal({
-  postId,
-  close,
-}: DeletePostModalProps) {
+export default function DeletePostModal({ close }: DeletePostModalProps) {
   const [animateState, setAnimateState] = useState("animate-fadeInUp");
   const queryClient = useQueryClient();
 
+  const selectedPost = useContext(PostContext);
+
   const mutation = useMutation({
-    mutationFn: () => handleDeletePost(postId),
+    mutationFn: () => handleDeletePost(selectedPost.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },

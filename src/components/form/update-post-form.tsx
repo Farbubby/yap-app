@@ -4,16 +4,17 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { handleUpdatePost } from "@/server/post/update-post";
 import TextArea from "../text-area";
 import Input from "../input";
+import { PostContext } from "@/context/user-context";
+import { useContext } from "react";
 
-interface UpdatePostFormProps {
-  postId: string;
-}
-
-export default function UpdatePostForm({ postId }: UpdatePostFormProps) {
+export default function UpdatePostForm() {
   const queryClient = useQueryClient();
 
+  const selectedPost = useContext(PostContext);
+
   const mutation = useMutation({
-    mutationFn: (formData: FormData) => handleUpdatePost(postId, formData),
+    mutationFn: (formData: FormData) =>
+      handleUpdatePost(selectedPost.id, formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },

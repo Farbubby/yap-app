@@ -28,16 +28,6 @@ export default function Post({
   const [likes, setLikes] = useState(false);
   const [dislikes, setDislikes] = useState(false);
 
-  const originalPost = {
-    id,
-    title,
-    content,
-    author,
-    date,
-    numLikes,
-    numDislikes,
-  };
-
   const like = likes ? "fill-red-500" : "fill-gray-500";
   const dislike = dislikes ? "fill-blue-500" : "fill-gray-500";
 
@@ -53,8 +43,20 @@ export default function Post({
             <div className="text-2xl">{title}</div>
             {hasPermission && (
               <div className="flex flex-row gap-4">
-                <UpdatePostButton postId={id} />
-                <DeletePostButton postId={id} />
+                <PostContext.Provider
+                  value={{
+                    id,
+                    title,
+                    content,
+                    author,
+                    date,
+                    numLikes,
+                    numDislikes,
+                  }}>
+                  <UpdatePostButton />
+                  <DeletePostButton />
+                  <OpenCommentsButton />
+                </PostContext.Provider>
               </div>
             )}
           </div>
@@ -99,9 +101,6 @@ export default function Post({
               <div>{numDislikes}</div>
             </div>
           </div>
-          <PostContext.Provider value={originalPost}>
-            <OpenCommentsButton />
-          </PostContext.Provider>
         </div>
       </div>
     </>

@@ -4,11 +4,7 @@ import { useState } from "react";
 import UpdatePostForm from "./form/update-post-form";
 import Modal from "./modal";
 
-interface UpdatePostButtonProps {
-  postId: string;
-}
-
-export default function UpdatePostButton({ postId }: UpdatePostButtonProps) {
+export default function UpdatePostButton() {
   const [toggle, setToggle] = useState(false);
   return (
     <>
@@ -30,7 +26,7 @@ export default function UpdatePostButton({ postId }: UpdatePostButtonProps) {
       </button>
       {toggle && (
         <Modal close={() => setToggle(false)}>
-          <UpdatePostForm postId={postId} />
+          <UpdatePostForm />
         </Modal>
       )}
     </>

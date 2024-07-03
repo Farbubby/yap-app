@@ -3,11 +3,7 @@
 import { useState } from "react";
 import DeletePostModal from "./delete-post-modal";
 
-interface DeletePostButtonProps {
-  postId: string;
-}
-
-export default function DeletePostButton({ postId }: DeletePostButtonProps) {
+export default function DeletePostButton() {
   const [toggleDeletePostModal, setToggleDeletePostModal] = useState(false);
   return (
     <>
@@ -27,10 +23,7 @@ export default function DeletePostButton({ postId }: DeletePostButtonProps) {
         </svg>
       </button>
       {toggleDeletePostModal && (
-        <DeletePostModal
-          postId={postId}
-          close={() => setToggleDeletePostModal(false)}
-        />
+        <DeletePostModal close={() => setToggleDeletePostModal(false)} />
       )}
     </>
   );
