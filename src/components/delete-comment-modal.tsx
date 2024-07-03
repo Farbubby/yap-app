@@ -2,44 +2,30 @@
 
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "@/context/user-context";
+import { handleDeleteComment } from "@/server/comment/delete-comment";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface DeleteCommentModalProps {
   commentId: string;
+  postId: string;
   close: () => void;
 }
 
 // Modal form for deleting a post
 export default function DeleteCommentModal({
   commentId,
+  postId,
   close,
 }: DeleteCommentModalProps) {
   const [animateState, setAnimateState] = useState("animate-fadeInUp");
-  const [error, setError] = useState("");
+  const queryClient = useQueryClient();
 
-  const user = useContext(UserContext);
-
-  const handleDeleteComment = async (e: any) => {
-    if (!user) {
-      setError("Please log in to delete your comments");
-      e.preventDefault();
-      return;
-    }
-
-    const response = await fetch("/api/comments", {
-      method: "DELETE",
-      body: JSON.stringify({ commentId }),
-    });
-
-    if (response.ok) {
-      const { comment, message } = await response.json();
-      console.log(comment, message);
-      setError("");
-      window.location.reload();
-    } else {
-      console.error("Failed to delete comment");
-      setError("Failed to delete comment");
-    }
-  };
+  const mutation = useMutation({
+    mutationFn: () => handleDeleteComment(commentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+    },
+  });
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -54,11 +40,17 @@ export default function DeleteCommentModal({
             Are you sure you want to delete this comment?
           </div>
           <div className="sm:text-sm text-xs text-center flex flex-row gap-20 justify-center">
-            <button
-              className="rounded-lg p-2 bg-green-700 w-20 hover:bg-green-500"
-              onClick={handleDeleteComment}>
-              Yes
-            </button>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setAnimateState("animate-fadeOutDown");
+                setTimeout(() => close(), 500);
+                mutation.mutate();
+              }}>
+              <button className="rounded-lg p-2 bg-green-700 w-20 hover:bg-green-500">
+                Yes
+              </button>
+            </form>
             <button
               className="rounded-lg p-2 bg-red-700 w-20 hover:bg-red-500"
               onClick={() => {
