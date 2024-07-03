@@ -1,19 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import UpdatePostModal from "./update-post-modal";
+import UpdatePostForm from "./form/update-post-form";
+import Modal from "./modal";
 
 interface UpdatePostButtonProps {
   postId: string;
 }
 
 export default function UpdatePostButton({ postId }: UpdatePostButtonProps) {
-  const [toggleUpdatePostModal, setToggleUpdatePostModal] = useState(false);
+  const [toggle, setToggle] = useState(false);
   return (
     <>
       <button>
         <svg
-          onClick={() => setToggleUpdatePostModal(true)}
+          onClick={() => setToggle(true)}
           className="h-6 w-6 cursor-pointer fill-white"
           clip-rule="evenodd"
           fill-rule="evenodd"
@@ -27,11 +28,10 @@ export default function UpdatePostButton({ postId }: UpdatePostButtonProps) {
           />
         </svg>
       </button>
-      {toggleUpdatePostModal && (
-        <UpdatePostModal
-          postId={postId}
-          close={() => setToggleUpdatePostModal(false)}
-        />
+      {toggle && (
+        <Modal close={() => setToggle(false)}>
+          <UpdatePostForm postId={postId} />
+        </Modal>
       )}
     </>
   );

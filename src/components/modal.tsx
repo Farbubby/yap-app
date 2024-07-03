@@ -1,18 +1,14 @@
 "use client";
 
-import { useState, useContext, useEffect } from "react";
-import UpdatePostForm from "./form/update-post-form";
+import { useState, useEffect } from "react";
 
-interface UpdatePostModalProps {
-  postId: string;
+interface ModalProps {
   close: () => void;
+  children: React.ReactNode;
 }
 
-// Modal form for updating a post
-export default function UpdatePostModal({
-  postId,
-  close,
-}: UpdatePostModalProps) {
+// Modal form for creating a post
+export default function CreatePostModal({ close, children }: ModalProps) {
   const [animateState, setAnimateState] = useState("animate-fadeInUp");
 
   useEffect(() => {
@@ -27,7 +23,7 @@ export default function UpdatePostModal({
       <div className="fixed inset-0 flex flex-row w-full h-full backdrop-blur-md justify-center items-center z-50">
         <div
           className={`border border-gray-700 p-6 rounded-lg flex flex-col gap-8 xl:w-2/5 lg:w-1/2 md:w-2/3 sm:w-3/4 w-4/5 bg-gray-950 ${animateState}`}>
-          <div className="text-sm flex flex-col gap-2">
+          <div className="text-sm flex flex-col gap-8">
             <div className="w-full flex flex-row justify-end">
               <button
                 onClick={() => {
@@ -46,7 +42,7 @@ export default function UpdatePostModal({
                 </svg>
               </button>
             </div>
-            <UpdatePostForm postId={postId} />
+            {children}
           </div>
         </div>
       </div>

@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import UpdateCommentModal from "./update-comment-modal";
+import { useState, useContext } from "react";
+import UpdateCommentForm from "./form/update-comment-form";
+import { PostContext } from "@/context/user-context";
+import Modal from "./modal";
 
 interface UpdateCommentButtonProps {
   commentId: string;
@@ -10,13 +12,14 @@ interface UpdateCommentButtonProps {
 export default function UpdateCommentButton({
   commentId,
 }: UpdateCommentButtonProps) {
-  const [toggleUpdateCommentModal, setToggleUpdateCommentModal] =
-    useState(false);
+  const [toggle, setToggle] = useState(false);
+
+  const post = useContext(PostContext);
   return (
     <>
       <button>
         <svg
-          onClick={() => setToggleUpdateCommentModal(true)}
+          onClick={() => setToggle(true)}
           className="h-5 w-5 cursor-pointer fill-white"
           clip-rule="evenodd"
           fill-rule="evenodd"
@@ -30,11 +33,10 @@ export default function UpdateCommentButton({
           />
         </svg>
       </button>
-      {toggleUpdateCommentModal && (
-        <UpdateCommentModal
-          commentId={commentId}
-          close={() => setToggleUpdateCommentModal(false)}
-        />
+      {toggle && (
+        <Modal close={() => setToggle(false)}>
+          <UpdateCommentForm commentId={commentId} postId={post.id} />
+        </Modal>
       )}
     </>
   );
