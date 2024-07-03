@@ -1,4 +1,4 @@
-import LoginForm from "../../components/login-form";
+import LoginForm from "../../components/form/login-form";
 import { redirect } from "next/navigation";
 import { validateRequest } from "@/auth/validate";
 

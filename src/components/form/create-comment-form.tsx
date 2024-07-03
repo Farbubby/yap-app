@@ -2,8 +2,8 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { handleCreateComment } from "@/server/comment/create-comment";
-import TextArea from "./text-area";
-import Input from "./input";
+import TextArea from "../text-area";
+import Input from "../input";
 
 interface CreateCommentFormProps {
   postId: string;

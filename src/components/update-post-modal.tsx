@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useContext, useEffect } from "react";
-import UpdatePostForm from "./update-post-form";
+import UpdatePostForm from "./form/update-post-form";
 
 interface UpdatePostModalProps {
   postId: string;

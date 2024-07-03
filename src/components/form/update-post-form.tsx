@@ -1,15 +1,19 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { handleCreatePost } from "@/server/post/create-post";
-import TextArea from "./text-area";
-import Input from "./input";
+import { handleUpdatePost } from "@/server/post/update-post";
+import TextArea from "../text-area";
+import Input from "../input";
 
-export default function CreatePostForm() {
+interface UpdatePostFormProps {
+  postId: string;
+}
+
+export default function UpdatePostForm({ postId }: UpdatePostFormProps) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (formData: FormData) => handleCreatePost(formData),
+    mutationFn: (formData: FormData) => handleUpdatePost(postId, formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
@@ -18,7 +22,7 @@ export default function CreatePostForm() {
   return (
     <>
       <div className="flex flex-col items-center gap-8">
-        <h1 className="text-2xl font-bold">Want to post something?</h1>
+        <h1 className="text-2xl font-bold">Want to update this post?</h1>
         <form
           onSubmit={(e) => {
             e.preventDefault();

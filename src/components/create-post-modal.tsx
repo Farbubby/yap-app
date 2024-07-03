@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useContext, useEffect } from "react";
-import CreatePostForm from "./create-post-form";
+import CreatePostForm from "./form/create-post-form";
 
 interface CreatePostModalProps {
   close: () => void;

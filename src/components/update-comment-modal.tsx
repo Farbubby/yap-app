@@ -2,7 +2,7 @@
 
 import { useState, useContext, useEffect } from "react";
 import { PostContext } from "@/context/user-context";
-import UpdateCommentForm from "./update-comment-form";
+import UpdateCommentForm from "./form/update-comment-form";
 
 interface UpdateCommentModalProps {
   commentId: string;

@@ -3,7 +3,7 @@
 import { useState, useEffect, useContext } from "react";
 import { UserContext, PostContext } from "@/context/user-context";
 import CommentList from "./comment-list";
-import CreateCommentForm from "./create-comment-form";
+import CreateCommentForm from "./form/create-comment-form";
 
 interface OpenCommentsModalProps {
   close: () => void;
