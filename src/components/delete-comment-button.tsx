@@ -1,24 +1,14 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useState } from "react";
 import DeleteCommentModal from "./delete-comment-modal";
-import { PostContext } from "@/context/user-context";
 
-interface DeleteCommentButtonProps {
-  commentId: string;
-}
-
-export default function DeleteCommentButton({
-  commentId,
-}: DeleteCommentButtonProps) {
-  const [toggleDeleteCommentModal, setToggleDeleteCommentModal] =
-    useState(false);
-
-  const post = useContext(PostContext);
+export default function DeleteCommentButton() {
+  const [toggle, setToggle] = useState(false);
 
   return (
     <>
-      <button onClick={() => setToggleDeleteCommentModal(true)}>
+      <button onClick={() => setToggle(true)}>
         <svg
           className="h-5 w-5 cursor-pointer fill-white"
           clip-rule="evenodd"
@@ -33,13 +23,7 @@ export default function DeleteCommentButton({
           />
         </svg>
       </button>
-      {toggleDeleteCommentModal && (
-        <DeleteCommentModal
-          postId={post.id}
-          commentId={commentId}
-          close={() => setToggleDeleteCommentModal(false)}
-        />
-      )}
+      {toggle && <DeleteCommentModal close={() => setToggle(false)} />}
     </>
   );
 }

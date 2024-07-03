@@ -1,20 +1,12 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useState } from "react";
 import UpdateCommentForm from "./form/update-comment-form";
-import { PostContext } from "@/context/user-context";
 import Modal from "./modal";
 
-interface UpdateCommentButtonProps {
-  commentId: string;
-}
-
-export default function UpdateCommentButton({
-  commentId,
-}: UpdateCommentButtonProps) {
+export default function UpdateCommentButton() {
   const [toggle, setToggle] = useState(false);
 
-  const post = useContext(PostContext);
   return (
     <>
       <button>
@@ -35,7 +27,7 @@ export default function UpdateCommentButton({
       </button>
       {toggle && (
         <Modal close={() => setToggle(false)}>
-          <UpdateCommentForm commentId={commentId} postId={post.id} />
+          <UpdateCommentForm />
         </Modal>
       )}
     </>

@@ -3,23 +3,23 @@
 import { handleUpdateComment } from "@/server/comment/update-comment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import TextArea from "../text-area";
+import { PostContext } from "@/context/user-context";
+import { CommentContext } from "@/context/comment-context";
+import { useContext } from "react";
 
-interface UpdateCommentFormProps {
-  commentId: string;
-  postId: string;
-}
-
-export default function UpdateCommentForm({
-  commentId,
-  postId,
-}: UpdateCommentFormProps) {
+export default function UpdateCommentForm() {
   const queryClient = useQueryClient();
+
+  const selectedPost = useContext(PostContext);
+  const selectedComment = useContext(CommentContext);
 
   const mutation = useMutation({
     mutationFn: (formData: FormData) =>
-      handleUpdateComment(formData, commentId),
+      handleUpdateComment(formData, selectedComment.id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+      queryClient.invalidateQueries({
+        queryKey: ["comments", selectedPost.id],
+      });
     },
   });
 

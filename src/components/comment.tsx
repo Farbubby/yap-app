@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "@/context/user-context";
 import UpdateCommentButton from "./update-comment-button";
 import DeleteCommentButton from "./delete-comment-button";
+import { CommentContext } from "@/context/comment-context";
 
 interface CommentProps {
   id: string;
@@ -38,8 +39,11 @@ export default function Comment({
             <div className="text-sm italic">{author}</div>
             {hasPermission && (
               <div className="flex flex-row gap-4">
-                <UpdateCommentButton commentId={id} />
-                <DeleteCommentButton commentId={id} />
+                <CommentContext.Provider
+                  value={{ id, content, author, date, numLikes, numDislikes }}>
+                  <UpdateCommentButton />
+                  <DeleteCommentButton />
+                </CommentContext.Provider>
               </div>
             )}
           </div>

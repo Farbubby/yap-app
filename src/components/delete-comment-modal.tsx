@@ -1,29 +1,29 @@
 "use client";
 
 import { useState, useContext, useEffect } from "react";
-import { UserContext } from "@/context/user-context";
+import { PostContext } from "@/context/user-context";
+import { CommentContext } from "@/context/comment-context";
 import { handleDeleteComment } from "@/server/comment/delete-comment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface DeleteCommentModalProps {
-  commentId: string;
-  postId: string;
   close: () => void;
 }
 
 // Modal form for deleting a post
-export default function DeleteCommentModal({
-  commentId,
-  postId,
-  close,
-}: DeleteCommentModalProps) {
+export default function DeleteCommentModal({ close }: DeleteCommentModalProps) {
   const [animateState, setAnimateState] = useState("animate-fadeInUp");
   const queryClient = useQueryClient();
 
+  const selectedPost = useContext(PostContext);
+  const selectedComment = useContext(CommentContext);
+
   const mutation = useMutation({
-    mutationFn: () => handleDeleteComment(commentId),
+    mutationFn: () => handleDeleteComment(selectedComment.id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+      queryClient.invalidateQueries({
+        queryKey: ["comments", selectedPost.id],
+      });
     },
   });
 
